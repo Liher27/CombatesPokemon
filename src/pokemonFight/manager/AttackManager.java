@@ -33,13 +33,12 @@ public class AttackManager {
 	Attack bugBuzz = new Attack("Estoicismo", 70, 100);
 
 	public long calculateAttackDamage(Attack usedAttack, Pokemon deffensorPokemon, Pokemon attackingPokemon) {
-		long baseDamage = Math.round(usedAttack.getAttackPotency() + (attackingPokemon.getPokemonLvl() * 0.01)
-				- (deffensorPokemon.getPokemonDefense() + deffensorPokemon.getPokemonLvl() * 0.01));
+		long baseDamage = Math.round(usedAttack.getAttackPotency() + (attackingPokemon.getPokemonLvl()+attackingPokemon.getPokemonAttackStat() * 0.1)
+				- (deffensorPokemon.getPokemonDefense() + deffensorPokemon.getPokemonLvl() * 0.1));
 
 		boolean hit = new Random().nextInt(100) < usedAttack.getAttackPrecission();
 		if (!hit)
-			return 0;
-
-		return Math.max(baseDamage, 0);
+			baseDamage = 0;
+		return baseDamage;
 	}
 }

@@ -206,21 +206,7 @@ public class GamePanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				allyPokemonTeam = changePokemon(allyPokemonTeam);
-				allyPokemonLifeBar.setValue(allyPokemonTeam.get(0).getPokemonHP());
-				allyPokemonName.setText(allyPokemonTeam.get(0).getPokemonName());
-				decissionTextLbl.setText("¿Que deberia hacer " + allyPokemonTeam.get(0).getPokemonName() + "?");
-//				if (null != allyPokemonTeam.get(0).getPokemonAttack1().getAttackName())
-//					 attackBtn_1 = new JLabel(allyPokemonTeam.get(0).getPokemonAttack1().getAttackName());
-//				if (null != allyPokemonTeam.get(0).getPokemonAttack2().getAttackName())
-//					attackBtn_2 = new JLabel(allyPokemonTeam.get(0).getPokemonAttack2().getAttackName());
-//				if (null != allyPokemonTeam.get(0).getPokemonAttack3().getAttackName())
-//					attackBtn_3 = new JLabel(allyPokemonTeam.get(0).getPokemonAttack3().getAttackName());
-//				if (null != allyPokemonTeam.get(0).getPokemonAttack4().getAttackName())
-//					attackBtn_4 = new JLabel(allyPokemonTeam.get(0).getPokemonAttack4().getAttackName());
-
-				scaledAllyIcon = new ImageIcon(allyPokemonTeam.get(0).getPokemonBack().getScaledInstance(newWidth,
-						newHeight, Image.SCALE_SMOOTH));
-				allySprite.setIcon(scaledAllyIcon);
+				refreshOverlayData(allyPokemonTeam);
 
 			}
 		});
@@ -322,6 +308,28 @@ public class GamePanel extends JPanel {
 		return background;
 	}
 
+	public void refreshOverlayData(List<Pokemon> allyPokemonTeam) {
+		allyPokemonLifeBar = new JProgressBar(0, allyPokemonTeam.get(0).getPokemonHP());
+		allyPokemonName.setText(allyPokemonTeam.get(0).getPokemonName());
+		decissionTextLbl.setText("¿Que deberia hacer " + allyPokemonTeam.get(0).getPokemonName() + "?");
+		if (null != allyPokemonTeam.get(0).getPokemonAttack1())
+			 attackBtn_1.setText(allyPokemonTeam.get(0).getPokemonAttack1().getAttackName());
+		else  attackBtn_1.setText("");
+		if (null != allyPokemonTeam.get(0).getPokemonAttack2())
+			attackBtn_2.setText(allyPokemonTeam.get(0).getPokemonAttack2().getAttackName());
+		else  attackBtn_2.setText("");
+		if (null != allyPokemonTeam.get(0).getPokemonAttack3())
+			attackBtn_3.setText(allyPokemonTeam.get(0).getPokemonAttack3().getAttackName());
+		else  attackBtn_3.setText("");
+		if (null != allyPokemonTeam.get(0).getPokemonAttack4())
+			attackBtn_4.setText(allyPokemonTeam.get(0).getPokemonAttack4().getAttackName());
+		else  attackBtn_4.setText("");
+
+		scaledAllyIcon = new ImageIcon(allyPokemonTeam.get(0).getPokemonBack().getScaledInstance(newWidth,
+				newHeight, Image.SCALE_SMOOTH));
+		allySprite.setIcon(scaledAllyIcon);
+	}
+	
 	public List<Pokemon> selectTeamPokemons(String message) throws IOException {
 		JOptionPane.showMessageDialog(null, message, "Bienvenido!!", JOptionPane.INFORMATION_MESSAGE);
 

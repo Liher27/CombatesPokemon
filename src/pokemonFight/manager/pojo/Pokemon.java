@@ -9,7 +9,7 @@ public class Pokemon {
 	int pokemonHP = 0;
 	int pokemonSpeed = 0;
 	int pokemonDefense = 0;
-	int pokemonEvolutionLvl = 0;
+	int pokemonAttackStat = 0;
 
 	String pokemonName = null;
 
@@ -21,14 +21,14 @@ public class Pokemon {
 	BufferedImage pokemonBack = null;
 	BufferedImage pokemonFront = null;
 
-	public Pokemon(int pokemonLvl, int pokemonHP, int pokemonSpeed, int pokemonDefense, int pokemonEvolutionLvl,
+	public Pokemon(int pokemonLvl, int pokemonHP, int pokemonSpeed, int pokemonDefense, int pokemonAttackStat,
 			String pokemonName, Attack pokemonAttack1, Attack pokemonAttack2, Attack pokemonAttack3,
 			Attack pokemonAttack4,  BufferedImage pokemonFront, BufferedImage pokemonBack) {
 		this.pokemonLvl = pokemonLvl;
 		this.pokemonHP = pokemonHP;
 		this.pokemonSpeed = pokemonSpeed;
 		this.pokemonDefense = pokemonDefense;
-		this.pokemonEvolutionLvl = pokemonEvolutionLvl;
+		this.pokemonAttackStat = pokemonAttackStat;
 		this.pokemonName = pokemonName;
 		this.pokemonAttack1 = pokemonAttack1;
 		this.pokemonAttack2 = pokemonAttack2;
@@ -70,12 +70,12 @@ public class Pokemon {
 		this.pokemonDefense = pokemonDefense;
 	}
 
-	public int getPokemonEvolutionLvl() {
-		return pokemonEvolutionLvl;
+	public int getPokemonAttackStat() {
+		return pokemonAttackStat;
 	}
 
-	public void setPokemonEvolutionLvl(int pokemonEvolutionLvl) {
-		this.pokemonEvolutionLvl = pokemonEvolutionLvl;
+	public void setPokemonAttackStat(int pokemonAttackStat) {
+		this.pokemonAttackStat = pokemonAttackStat;
 	}
 
 	public String getPokemonName() {
@@ -135,9 +135,18 @@ public class Pokemon {
 	}
 
 	@Override
+	public String toString() {
+		return "Pokemon [pokemonLvl=" + pokemonLvl + ", pokemonHP=" + pokemonHP + ", pokemonSpeed=" + pokemonSpeed
+				+ ", pokemonDefense=" + pokemonDefense + ", pokemonAttackStat=" + pokemonAttackStat + ", pokemonName="
+				+ pokemonName + ", pokemonAttack1=" + pokemonAttack1 + ", pokemonAttack2=" + pokemonAttack2
+				+ ", pokemonAttack3=" + pokemonAttack3 + ", pokemonAttack4=" + pokemonAttack4 + ", pokemonBack="
+				+ pokemonBack + ", pokemonFront=" + pokemonFront + "]";
+	}
+
+	@Override
 	public int hashCode() {
-		return Objects.hash(pokemonAttack1, pokemonAttack2, pokemonAttack3, pokemonAttack4, pokemonBack, pokemonDefense,
-				pokemonEvolutionLvl, pokemonFront, pokemonHP, pokemonLvl, pokemonName, pokemonSpeed);
+		return Objects.hash(pokemonAttack1, pokemonAttack2, pokemonAttack3, pokemonAttack4, pokemonAttackStat,
+				pokemonBack, pokemonDefense, pokemonFront, pokemonHP, pokemonLvl, pokemonName, pokemonSpeed);
 	}
 
 	@Override
@@ -152,22 +161,10 @@ public class Pokemon {
 		return Objects.equals(pokemonAttack1, other.pokemonAttack1)
 				&& Objects.equals(pokemonAttack2, other.pokemonAttack2)
 				&& Objects.equals(pokemonAttack3, other.pokemonAttack3)
-				&& Objects.equals(pokemonAttack4, other.pokemonAttack4)
+				&& Objects.equals(pokemonAttack4, other.pokemonAttack4) && pokemonAttackStat == other.pokemonAttackStat
 				&& Objects.equals(pokemonBack, other.pokemonBack) && pokemonDefense == other.pokemonDefense
-				&& pokemonEvolutionLvl == other.pokemonEvolutionLvl && Objects.equals(pokemonFront, other.pokemonFront)
-				&& pokemonHP == other.pokemonHP && pokemonLvl == other.pokemonLvl
-				&& Objects.equals(pokemonName, other.pokemonName) && pokemonSpeed == other.pokemonSpeed;
+				&& Objects.equals(pokemonFront, other.pokemonFront) && pokemonHP == other.pokemonHP
+				&& pokemonLvl == other.pokemonLvl && Objects.equals(pokemonName, other.pokemonName)
+				&& pokemonSpeed == other.pokemonSpeed;
 	}
-
-	@Override
-	public String toString() {
-		return "Pokemon [pokemonLvl=" + pokemonLvl + ", pokemonHP=" + pokemonHP + ", pokemonSpeed=" + pokemonSpeed
-				+ ", pokemonDefense=" + pokemonDefense + ", pokemonEvolutionLvl=" + pokemonEvolutionLvl
-				+ ", pokemonName=" + pokemonName + ", pokemonAttack1=" + pokemonAttack1 + ", pokemonAttack2="
-				+ pokemonAttack2 + ", pokemonAttack3=" + pokemonAttack3 + ", pokemonAttack4=" + pokemonAttack4
-				+ ", pokemonBack=" + pokemonBack + ", pokemonFront=" + pokemonFront + "]";
-	}
-
-	
-
 }
