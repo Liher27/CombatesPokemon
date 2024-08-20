@@ -85,7 +85,14 @@ public class GamePanel extends JPanel {
 				attackBtn_1.setBounds(68, 463, 163, 55);
 				add(attackBtn_1);
 				attackBtn_1.setVisible(false);
-			}
+			} else
+				attackBtn_1 = new JLabel();
+			attackBtn_1.setHorizontalAlignment(SwingConstants.CENTER);
+			attackBtn_1.setForeground(Color.RED);
+			attackBtn_1.setFont(new Font("Tahoma", Font.BOLD, 20));
+			attackBtn_1.setBounds(68, 463, 163, 55);
+			add(attackBtn_1);
+			attackBtn_1.setVisible(false);
 
 			if (null != allyPokemonTeam.get(0).getPokemonAttack2()) {
 				attackBtn_2 = new JLabel(allyPokemonTeam.get(0).getPokemonAttack2().getAttackName());
@@ -109,7 +116,14 @@ public class GamePanel extends JPanel {
 				attackBtn_2.setBounds(68, 530, 163, 55);
 				add(attackBtn_2);
 				attackBtn_2.setVisible(false);
-			}
+			} else
+				attackBtn_2 = new JLabel();
+			attackBtn_2.setHorizontalAlignment(SwingConstants.CENTER);
+			attackBtn_2.setForeground(Color.RED);
+			attackBtn_2.setFont(new Font("Tahoma", Font.BOLD, 20));
+			attackBtn_2.setBounds(68, 530, 163, 55);
+			add(attackBtn_2);
+			attackBtn_2.setVisible(false);
 
 			if (null != allyPokemonTeam.get(0).getPokemonAttack3()) {
 				attackBtn_3 = new JLabel(allyPokemonTeam.get(0).getPokemonAttack3().getAttackName());
@@ -124,7 +138,14 @@ public class GamePanel extends JPanel {
 				attackBtn_3.setBounds(337, 530, 163, 55);
 				add(attackBtn_3);
 				attackBtn_3.setVisible(false);
-			}
+			} else
+				attackBtn_3 = new JLabel();
+			attackBtn_3.setHorizontalAlignment(SwingConstants.CENTER);
+			attackBtn_3.setForeground(Color.RED);
+			attackBtn_3.setFont(new Font("Tahoma", Font.BOLD, 20));
+			attackBtn_3.setBounds(337, 530, 163, 55);
+			add(attackBtn_3);
+			attackBtn_3.setVisible(false);
 
 			if (null != allyPokemonTeam.get(0).getPokemonAttack4()) {
 				attackBtn_4 = new JLabel(allyPokemonTeam.get(0).getPokemonAttack4().getAttackName());
@@ -139,7 +160,14 @@ public class GamePanel extends JPanel {
 				attackBtn_4.setBounds(337, 463, 163, 55);
 				add(attackBtn_4);
 				attackBtn_4.setVisible(false);
-			}
+			} else
+				attackBtn_4 = new JLabel();
+			attackBtn_4.setHorizontalAlignment(SwingConstants.CENTER);
+			attackBtn_4.setForeground(Color.RED);
+			attackBtn_4.setFont(new Font("Tahoma", Font.BOLD, 20));
+			attackBtn_4.setBounds(337, 463, 163, 55);
+			add(attackBtn_4);
+			attackBtn_4.setVisible(false);
 
 			enemyPokemonName = new JLabel(enemyPokemonTeam.get(0).getPokemonName());
 			enemyPokemonName.setHorizontalAlignment(SwingConstants.CENTER);
@@ -313,27 +341,31 @@ public class GamePanel extends JPanel {
 		allyPokemonName.setText(allyPokemonTeam.get(0).getPokemonName());
 		decissionTextLbl.setText("¿Que deberia hacer " + allyPokemonTeam.get(0).getPokemonName() + "?");
 		if (null != allyPokemonTeam.get(0).getPokemonAttack1())
-			 attackBtn_1.setText(allyPokemonTeam.get(0).getPokemonAttack1().getAttackName());
-		else  attackBtn_1.setText("");
+			attackBtn_1.setText(allyPokemonTeam.get(0).getPokemonAttack1().getAttackName());
+		else
+			attackBtn_1.setText("");
 		if (null != allyPokemonTeam.get(0).getPokemonAttack2())
 			attackBtn_2.setText(allyPokemonTeam.get(0).getPokemonAttack2().getAttackName());
-		else  attackBtn_2.setText("");
+		else
+			attackBtn_2.setText("");
 		if (null != allyPokemonTeam.get(0).getPokemonAttack3())
 			attackBtn_3.setText(allyPokemonTeam.get(0).getPokemonAttack3().getAttackName());
-		else  attackBtn_3.setText("");
+		else
+			attackBtn_3.setText("");
 		if (null != allyPokemonTeam.get(0).getPokemonAttack4())
 			attackBtn_4.setText(allyPokemonTeam.get(0).getPokemonAttack4().getAttackName());
-		else  attackBtn_4.setText("");
+		else
+			attackBtn_4.setText("");
 
-		scaledAllyIcon = new ImageIcon(allyPokemonTeam.get(0).getPokemonBack().getScaledInstance(newWidth,
-				newHeight, Image.SCALE_SMOOTH));
+		scaledAllyIcon = new ImageIcon(
+				allyPokemonTeam.get(0).getPokemonBack().getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH));
 		allySprite.setIcon(scaledAllyIcon);
 	}
-	
+
 	public List<Pokemon> selectTeamPokemons(String message) throws IOException {
 		JOptionPane.showMessageDialog(null, message, "Bienvenido!!", JOptionPane.INFORMATION_MESSAGE);
 
-		List<Pokemon> selectablePokemon = new PokemonManager().pokemons;
+		List<Pokemon> selectablePokemon = new PokemonManager().getPokemons();
 		String selectablePokemonNames = null;
 
 		DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<String>();
