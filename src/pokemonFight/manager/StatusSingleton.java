@@ -8,7 +8,7 @@ public class StatusSingleton {
 	
 	private GamePanel gamePanel = null;
 	
-	private StatusSingleton() {
+	public StatusSingleton() {
     }
 	
 	public static StatusSingleton getInstance() {
