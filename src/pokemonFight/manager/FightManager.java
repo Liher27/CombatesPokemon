@@ -4,12 +4,16 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JProgressBar;
 
+import pokemonFight.manager.pojo.Pokemon;
 import pokemonFight.view.GamePanel;
 
 public class FightManager {
+
 	GamePanel gamePanel = StatusSingleton.getInstance().getGamePanel();
 
 	public void loadInfo() throws NullPointerException, IOException, Exception {
@@ -22,19 +26,27 @@ public class FightManager {
 		loadImages();
 	}
 
-	public void calculateTurn() {
-		boolean turnElapsed = false;
-		do {
-			//calcular velocidad//
-						
-			
-			//elegirAtaque//
-						
-			
-			//turno terminado//
-			turnElapsed = true;
-		}while(true!=turnElapsed);
-		
+	public List<Pokemon> calculateTurn(List<Pokemon> combate) {
+		List<Pokemon> ret = new ArrayList<Pokemon>();
+
+		int iniciativa0 = combate.get(0).getPokemonSpeed();
+		int iniciativa1 = combate.get(1).getPokemonSpeed();
+
+		if (iniciativa0 == iniciativa1) {
+			ret.add(combate.get(0));
+			ret.add(combate.get(1));
+
+		} else if (iniciativa0 > iniciativa1) {
+
+			ret.add(combate.get(0));
+			ret.add(combate.get(1));
+		} else {
+			ret.add(combate.get(1));
+			ret.add(combate.get(0));
+
+		}
+
+		return ret;
 	}
 
 	private void loadImages() throws IOException {
@@ -51,7 +63,7 @@ public class FightManager {
 		gamePanel.allySprite.setIcon(gamePanel.scaledAllyIcon);
 	}
 
-	public BufferedImage toBufferedImage(Image img){
+	public BufferedImage toBufferedImage(Image img) {
 		if (img instanceof BufferedImage) {
 			return (BufferedImage) img;
 		}

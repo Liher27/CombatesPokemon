@@ -20,12 +20,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import pokemonFight.manager.AttackManager;
 import pokemonFight.manager.FightManager;
 import pokemonFight.manager.ImageManager;
 import pokemonFight.manager.PokemonManager;
 import pokemonFight.manager.StatusSingleton;
+import pokemonFight.manager.pojo.Attack;
 import pokemonFight.manager.pojo.Pokemon;
 
 public class GamePanel extends JPanel {
@@ -34,9 +36,10 @@ public class GamePanel extends JPanel {
 
 	public List<Pokemon> allyPokemonTeam = null;
 	public List<Pokemon> enemyPokemonTeam = null;
+	public List<Pokemon> combat = null;
 
-	public int newWidth = 150;
-	public int newHeight = 150;
+	public Pokemon allyPokemon = null;
+	public Pokemon enemyPokemon = null;
 
 	public JLabel allyLvlLbl = null;
 	public JLabel enemyLvlLbl = null;
@@ -57,20 +60,31 @@ public class GamePanel extends JPanel {
 	public ImageIcon scaledEnemyIcon = null;
 	public ImageIcon scaledAllyIcon = null;
 
+	public int newWidth = 150;
+	public int newHeight = 150;
+
 	public GamePanel() throws IOException {
 
 		allyPokemonTeam = selectTeamPokemons("Selecciona los pokemon para el equipo aliado!!");
 		enemyPokemonTeam = selectTeamPokemons("Selecciona los pokemon para el equipo enemigo!!");
 
+		allyPokemon = allyPokemonTeam.get(0);
+		enemyPokemon = enemyPokemonTeam.get(0);
+
+		combat = new ArrayList<Pokemon>();
+
+		combat.add(allyPokemon);
+		combat.add(enemyPokemon);
+
 		setLayout(null);
 
 		StatusSingleton.getInstance().setGamePanel(this);
-		
+
 		enemyLvlLbl = new JLabel();
 		enemyLvlLbl.setFont(new Font("Tahoma", Font.BOLD, 16));
 		enemyLvlLbl.setBounds(244, 11, 28, 51);
 		add(enemyLvlLbl);
-		
+
 		allyLvlLbl = new JLabel();
 		allyLvlLbl.setFont(new Font("Tahoma", Font.BOLD, 16));
 		allyLvlLbl.setBounds(747, 310, 28, 51);
@@ -115,30 +129,16 @@ public class GamePanel extends JPanel {
 		} catch (NullPointerException e) {
 			JOptionPane.showMessageDialog(null, "No se han escogido pokemons para el equipo", "Error",
 					JOptionPane.ERROR_MESSAGE);
-		}catch (IOException e) {
+		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Las Imagenes no han podido ser cargadas", "Error",
 					JOptionPane.ERROR_MESSAGE);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Error general", "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Error general", "Error",
-					JOptionPane.ERROR_MESSAGE);
-		}
-//////////////////////////////////////////////////////////////////////DEPENDE DE VELOCIDAD + TURNO///////////////////////////////////////////////////////////
-		if (null != allyPokemonTeam.get(0).getPokemonAttack1()) {
-			attackBtn_1 = new JLabel(allyPokemonTeam.get(0).getPokemonAttack1().getAttackName());
-			attackBtn_1.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-				}
-			});
-			attackBtn_1.setHorizontalAlignment(SwingConstants.CENTER);
-			attackBtn_1.setForeground(Color.RED);
-			attackBtn_1.setFont(new Font("Tahoma", Font.BOLD, 20));
-			attackBtn_1.setBounds(68, 463, 163, 55);
-			add(attackBtn_1);
-			attackBtn_1.setVisible(false);
-		} else
-			attackBtn_1 = new JLabel();
+
+		combat = new FightManager().calculateTurn(combat);
+
+		attackBtn_1 = new JLabel();
 		attackBtn_1.setHorizontalAlignment(SwingConstants.CENTER);
 		attackBtn_1.setForeground(Color.RED);
 		attackBtn_1.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -146,29 +146,7 @@ public class GamePanel extends JPanel {
 		add(attackBtn_1);
 		attackBtn_1.setVisible(false);
 
-		if (null != allyPokemonTeam.get(0).getPokemonAttack2()) {
-			attackBtn_2 = new JLabel(allyPokemonTeam.get(0).getPokemonAttack2().getAttackName());
-			attackBtn_2.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					long dealtAttack = new AttackManager().calculateAttackDamage(
-							allyPokemonTeam.get(0).getPokemonAttack2(), enemyPokemonTeam.get(0),
-							allyPokemonTeam.get(0));
-					if (dealtAttack > 0) {
-						calculatePokemonLife(enemyPokemonLifeBar.getValue(), dealtAttack);
-					} else {
-					}
-
-				}
-			});
-			attackBtn_2.setHorizontalAlignment(SwingConstants.CENTER);
-			attackBtn_2.setForeground(Color.RED);
-			attackBtn_2.setFont(new Font("Tahoma", Font.BOLD, 20));
-			attackBtn_2.setBounds(68, 530, 163, 55);
-			add(attackBtn_2);
-			attackBtn_2.setVisible(false);
-		} else
-			attackBtn_2 = new JLabel();
+		attackBtn_2 = new JLabel();
 		attackBtn_2.setHorizontalAlignment(SwingConstants.CENTER);
 		attackBtn_2.setForeground(Color.RED);
 		attackBtn_2.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -176,21 +154,7 @@ public class GamePanel extends JPanel {
 		add(attackBtn_2);
 		attackBtn_2.setVisible(false);
 
-		if (null != allyPokemonTeam.get(0).getPokemonAttack3()) {
-			attackBtn_3 = new JLabel(allyPokemonTeam.get(0).getPokemonAttack3().getAttackName());
-			attackBtn_3.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-				}
-			});
-			attackBtn_3.setHorizontalAlignment(SwingConstants.CENTER);
-			attackBtn_3.setForeground(Color.RED);
-			attackBtn_3.setFont(new Font("Tahoma", Font.BOLD, 20));
-			attackBtn_3.setBounds(337, 530, 163, 55);
-			add(attackBtn_3);
-			attackBtn_3.setVisible(false);
-		} else
-			attackBtn_3 = new JLabel();
+		attackBtn_3 = new JLabel();
 		attackBtn_3.setHorizontalAlignment(SwingConstants.CENTER);
 		attackBtn_3.setForeground(Color.RED);
 		attackBtn_3.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -198,21 +162,7 @@ public class GamePanel extends JPanel {
 		add(attackBtn_3);
 		attackBtn_3.setVisible(false);
 
-		if (null != allyPokemonTeam.get(0).getPokemonAttack4()) {
-			attackBtn_4 = new JLabel(allyPokemonTeam.get(0).getPokemonAttack4().getAttackName());
-			attackBtn_4.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-				}
-			});
-			attackBtn_4.setHorizontalAlignment(SwingConstants.CENTER);
-			attackBtn_4.setForeground(Color.RED);
-			attackBtn_4.setFont(new Font("Tahoma", Font.BOLD, 20));
-			attackBtn_4.setBounds(337, 463, 163, 55);
-			add(attackBtn_4);
-			attackBtn_4.setVisible(false);
-		} else
-			attackBtn_4 = new JLabel();
+		attackBtn_4 = new JLabel();
 		attackBtn_4.setHorizontalAlignment(SwingConstants.CENTER);
 		attackBtn_4.setForeground(Color.RED);
 		attackBtn_4.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -220,13 +170,14 @@ public class GamePanel extends JPanel {
 		add(attackBtn_4);
 		attackBtn_4.setVisible(false);
 
-		decissionTextLbl = new JLabel("¿Que deberia hacer " + allyPokemonTeam.get(0).getPokemonName() + "?");
+		loadPokemonAttacks();
+
+		decissionTextLbl = new JLabel("¿Que deberia hacer " + combat.get(0).getPokemonName() + "?");
 		decissionTextLbl.setForeground(new Color(255, 255, 255));
 		decissionTextLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		decissionTextLbl.setFont(new Font("Tahoma", Font.BOLD, 24));
 		decissionTextLbl.setBounds(10, 443, 458, 157);
 		add(decissionTextLbl);
-//////////////////////////////////////////////////////////////////////DEPENDE DE VELOCIDAD///////////////////////////////////////////////////////////////////
 
 		JLabel allyPokemonLifeBarLbl = new JLabel();
 		allyPokemonLifeBarLbl.setBounds(488, 306, 299, 111);
@@ -254,6 +205,10 @@ public class GamePanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				allyPokemonTeam = changePokemon(allyPokemonTeam);
+				combat.remove(allyPokemon);
+				allyPokemon = allyPokemonTeam.get(0);
+				combat.add(allyPokemon);
+				combat = new FightManager().calculateTurn(combat);
 				refreshOverlayData(allyPokemonTeam);
 			}
 		});
@@ -355,7 +310,45 @@ public class GamePanel extends JPanel {
 		return background;
 	}
 
+	public void loadPokemonAttacks() {
+		if (null != combat.get(0).getPokemonAttack1())
+			attackBtn_1.setText(combat.get(0).getPokemonAttack1().getAttackName());
+		attackBtn_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				doDamage(combat.get(0).getPokemonAttack1());
+			}
+
+		});
+		if (null != combat.get(0).getPokemonAttack2())
+			attackBtn_2.setText(combat.get(0).getPokemonAttack2().getAttackName());
+		attackBtn_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				doDamage(combat.get(0).getPokemonAttack2());
+			}
+		});
+		if (null != combat.get(0).getPokemonAttack3())
+			attackBtn_3.setText(combat.get(0).getPokemonAttack3().getAttackName());
+		attackBtn_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				doDamage(combat.get(0).getPokemonAttack3());
+			}
+		});
+		if (null != combat.get(0).getPokemonAttack3())
+			attackBtn_4.setText(combat.get(0).getPokemonAttack4().getAttackName());
+		attackBtn_4.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				doDamage(combat.get(0).getPokemonAttack4());
+			}
+		});
+	}
+
 	public void refreshOverlayData(List<Pokemon> allyPokemonTeam) {
+		allyPokemon = allyPokemonTeam.get(0);
+		enemyPokemon = enemyPokemonTeam.get(0);
 		allyPokemonLifeBar = new JProgressBar(0, allyPokemonTeam.get(0).getPokemonHP());
 		allyPokemonName.setText(allyPokemonTeam.get(0).getPokemonName());
 		allyLvlLbl.setText(allyPokemonTeam.get(0).getPokemonLvl() + "");
@@ -383,10 +376,11 @@ public class GamePanel extends JPanel {
 	}
 
 	public List<Pokemon> selectTeamPokemons(String message) throws IOException {
-		JOptionPane.showMessageDialog(null, message, "Bienvenido!!", JOptionPane.INFORMATION_MESSAGE);
-
 		List<Pokemon> selectablePokemon = new PokemonManager().getPokemons();
 		String selectablePokemonNames = null;
+	
+		JPanel panel = new JPanel();
+		panel.add(new JLabel("Selecciona un Pokémon:"));
 
 		DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<String>();
 		for (int i = 0; i < selectablePokemon.size(); i++) {
@@ -396,9 +390,6 @@ public class GamePanel extends JPanel {
 
 		JComboBox<String> comboBox = new JComboBox<>();
 		comboBox.setModel(comboBoxModel);
-
-		JPanel panel = new JPanel();
-		panel.add(new JLabel("Selecciona un Pokémon:"));
 		panel.add(comboBox);
 
 		List<Pokemon> selectedPokemons = new ArrayList<>();
@@ -417,16 +408,7 @@ public class GamePanel extends JPanel {
 				break;
 			}
 		}
-		if (selectablePokemon.isEmpty()) {
-
-		}
 		return selectedPokemons;
-
-	}
-
-	private void calculatePokemonLife(int pokemonHealth, long dealtAttack) {
-		pokemonHealth = (int) (pokemonHealth - dealtAttack);
-		enemyPokemonLifeBar.setValue(pokemonHealth);
 	}
 
 	public List<Pokemon> changePokemon(List<Pokemon> team) {
@@ -459,6 +441,20 @@ public class GamePanel extends JPanel {
 			}
 		}
 		return team;
+	}
 
+	private void doDamage(Attack pokemonAttack) {
+		long dealtAttack = new AttackManager().calculateAttackDamage(pokemonAttack, combat.get(1), combat.get(0));
+		if (dealtAttack > 0) {
+			calculatePokemonLife(dealtAttack);
+		} else {
+			JOptionPane.showMessageDialog(null, "El ataque ha fallado!!!", "Mala suerte...", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private void calculatePokemonLife(long dealtAttack) {
+		int newHealth = enemyPokemonLifeBar.getValue() - (int) dealtAttack;
+		enemyPokemonLifeBar.setValue(newHealth);
+		enemyPokemonLifeBar.repaint();
 	}
 }
