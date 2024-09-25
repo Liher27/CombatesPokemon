@@ -18,5 +18,4 @@ public class PokemonManager {
 	public List<Pokemon> getPokemons(){
 		return eligiblePokemon;
 	}
-	
 }

@@ -6,9 +6,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JProgressBar;
 
+import pokemonFight.manager.pojo.Attack;
 import pokemonFight.manager.pojo.Pokemon;
 import pokemonFight.view.GamePanel;
 
@@ -47,6 +49,17 @@ public class FightManager {
 		}
 
 		return ret;
+	}
+	
+	public long calculateAttackDamage(Attack usedAttack, Pokemon deffensorPokemon, Pokemon attackingPokemon) {
+		long baseDamage = Math.round(usedAttack.getAttackPotency() + (attackingPokemon.getPokemonLvl()+attackingPokemon.getPokemonAttackStat() * 0.01)
+				- (deffensorPokemon.getPokemonDefense() + deffensorPokemon.getPokemonLvl() * 0.1));
+
+		boolean hit = new Random().nextInt(100) < usedAttack.getAttackPrecission();
+		if (!hit) {
+			baseDamage = 0;
+		}
+		return baseDamage;
 	}
 
 	private void loadImages() throws IOException {
