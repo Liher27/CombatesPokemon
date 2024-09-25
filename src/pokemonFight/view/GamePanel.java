@@ -68,8 +68,70 @@ public class GamePanel extends JPanel {
 		allyPokemonTeam = selectTeamPokemons("Selecciona los pokemon para el equipo aliado!!");
 		enemyPokemonTeam = selectTeamPokemons("Selecciona los pokemon para el equipo enemigo!!");
 
-		if (!allyPokemonTeam.isEmpty() && !enemyPokemonTeam.isEmpty()) {
+		setLayout(null);
+		
+		enemyLvlLbl = new JLabel();
+		enemyLvlLbl.setFont(new Font("Tahoma", Font.BOLD, 16));
+		enemyLvlLbl.setBounds(244, 11, 28, 51);
+		add(enemyLvlLbl);
+		
+		enemyPokemonLifeBar = new JProgressBar();
+		enemyPokemonLifeBar.setBackground(Color.green);
+		enemyPokemonLifeBar.setBounds(114, 53, 144, 20);
+		add(enemyPokemonLifeBar);
 
+		allyPokemonLifeBar = new JProgressBar();
+		allyPokemonLifeBar.setBounds(622, 350, 144, 20);
+		allyPokemonLifeBar.setBackground(Color.green);
+		add(allyPokemonLifeBar);
+
+		allyLvlLbl = new JLabel();
+		allyLvlLbl.setFont(new Font("Tahoma", Font.BOLD, 16));
+		allyLvlLbl.setBounds(747, 310, 28, 51);
+		add(allyLvlLbl);
+
+		allyPokemonName = new JLabel();
+		allyPokemonName.setFont(new Font("Tahoma", Font.BOLD, 18));
+		allyPokemonName.setHorizontalAlignment(SwingConstants.CENTER);
+		allyPokemonName.setBounds(510, 316, 163, 37);
+		add(allyPokemonName);
+
+		enemyPokemonName = new JLabel();
+		enemyPokemonName.setHorizontalAlignment(SwingConstants.CENTER);
+		enemyPokemonName.setFont(new Font("Tahoma", Font.BOLD, 18));
+		enemyPokemonName.setBounds(-10, 11, 163, 37);
+		add(enemyPokemonName);
+
+		scaledEnemyIcon = new ImageIcon();
+
+		enemySprite = new JLabel("");
+		enemySprite.setBounds(432, 106, 164, 145);
+		add(enemySprite);
+
+		scaledAllyIcon = new ImageIcon();
+
+		allySprite = new JLabel("");
+		allySprite.setBounds(136, 298, 164, 145);
+		add(allySprite);
+
+		JLabel allyPokemonLifeBarLbl = new JLabel();
+		allyPokemonLifeBarLbl.setBounds(488, 306, 299, 111);
+		allyPokemonLifeBarLbl.setIcon(new ImageIcon("contents/pokemonStatus/pokemonLifeBar.png"));
+		add(allyPokemonLifeBarLbl);
+
+		JLabel enemyLifeBarLbl = new JLabel();
+		enemyLifeBarLbl.setBounds(0, 11, 299, 80);
+		enemyLifeBarLbl.setIcon(new ImageIcon("contents/pokemonStatus/enemyLifeBar.png"));
+		add(enemyLifeBarLbl);
+		
+		JLabel fightBackgroundLbl = new JLabel("");
+		fightBackgroundLbl.setIcon(getBackgroundImage());
+		fightBackgroundLbl.setBounds(0, 0, 800, 443);
+		add(fightBackgroundLbl);
+		
+		StatusSingleton.getInstance().setGamePanel(this);
+		
+		if (!allyPokemonTeam.isEmpty() && !enemyPokemonTeam.isEmpty()) {
 			allyPokemon = allyPokemonTeam.get(0);
 			enemyPokemon = enemyPokemonTeam.get(0);
 
@@ -92,14 +154,44 @@ public class GamePanel extends JPanel {
 
 			combat = new FightManager().calculateTurn(combat);
 
-			loadPokemonAttacks();
-
 			decissionTextLbl = new JLabel("¿Que deberia hacer " + combat.get(0).getPokemonName() + "?");
 			decissionTextLbl.setForeground(new Color(255, 255, 255));
 			decissionTextLbl.setHorizontalAlignment(SwingConstants.CENTER);
 			decissionTextLbl.setFont(new Font("Tahoma", Font.BOLD, 24));
 			decissionTextLbl.setBounds(10, 443, 458, 157);
 			add(decissionTextLbl);
+			
+			attackBtn_1 = new JLabel();
+			attackBtn_1.setHorizontalAlignment(SwingConstants.CENTER);
+			attackBtn_1.setForeground(Color.RED);
+			attackBtn_1.setFont(new Font("Tahoma", Font.BOLD, 20));
+			attackBtn_1.setBounds(68, 463, 163, 55);
+			add(attackBtn_1);
+			attackBtn_1.setVisible(false);
+
+			attackBtn_2 = new JLabel();
+			attackBtn_2.setHorizontalAlignment(SwingConstants.CENTER);
+			attackBtn_2.setForeground(Color.RED);
+			attackBtn_2.setFont(new Font("Tahoma", Font.BOLD, 20));
+			attackBtn_2.setBounds(68, 530, 163, 55);
+			add(attackBtn_2);
+			attackBtn_2.setVisible(false);
+
+			attackBtn_3 = new JLabel();
+			attackBtn_3.setHorizontalAlignment(SwingConstants.CENTER);
+			attackBtn_3.setForeground(Color.RED);
+			attackBtn_3.setFont(new Font("Tahoma", Font.BOLD, 20));
+			attackBtn_3.setBounds(337, 530, 163, 55);
+			add(attackBtn_3);
+			attackBtn_3.setVisible(false);
+
+			attackBtn_4 = new JLabel();
+			attackBtn_4.setHorizontalAlignment(SwingConstants.CENTER);
+			attackBtn_4.setForeground(Color.RED);
+			attackBtn_4.setFont(new Font("Tahoma", Font.BOLD, 20));
+			attackBtn_4.setBounds(337, 463, 163, 55);
+			add(attackBtn_4);
+			attackBtn_4.setVisible(false);
 
 			JLabel swapBtn = new JLabel("Cambiar");
 			swapBtn.addMouseListener(new MouseAdapter() {
@@ -196,98 +288,11 @@ public class GamePanel extends JPanel {
 			attackBtn.setBounds(488, 464, 133, 55);
 			add(attackBtn);
 			
-			enemyPokemonLifeBar = new JProgressBar();
-			enemyPokemonLifeBar.setBackground(Color.green);
-			enemyPokemonLifeBar.setBounds(114, 53, 144, 20);
-			add(enemyPokemonLifeBar);
-
-			allyPokemonLifeBar = new JProgressBar();
-			allyPokemonLifeBar.setBounds(622, 350, 144, 20);
-			allyPokemonLifeBar.setBackground(Color.green);
-			add(allyPokemonLifeBar);
+			loadPokemonAttacks();
 		}else {
 			JOptionPane.showMessageDialog(null, "No se han seleccionado pokemon en algun equipo.", "ERROR!",
 					JOptionPane.ERROR_MESSAGE);
 		}
-		setLayout(null);
-
-		StatusSingleton.getInstance().setGamePanel(this);
-
-		enemyLvlLbl = new JLabel();
-		enemyLvlLbl.setFont(new Font("Tahoma", Font.BOLD, 16));
-		enemyLvlLbl.setBounds(244, 11, 28, 51);
-		add(enemyLvlLbl);
-
-		allyLvlLbl = new JLabel();
-		allyLvlLbl.setFont(new Font("Tahoma", Font.BOLD, 16));
-		allyLvlLbl.setBounds(747, 310, 28, 51);
-		add(allyLvlLbl);
-
-		allyPokemonName = new JLabel();
-		allyPokemonName.setFont(new Font("Tahoma", Font.BOLD, 18));
-		allyPokemonName.setHorizontalAlignment(SwingConstants.CENTER);
-		allyPokemonName.setBounds(510, 316, 163, 37);
-		add(allyPokemonName);
-
-		enemyPokemonName = new JLabel();
-		enemyPokemonName.setHorizontalAlignment(SwingConstants.CENTER);
-		enemyPokemonName.setFont(new Font("Tahoma", Font.BOLD, 18));
-		enemyPokemonName.setBounds(-10, 11, 163, 37);
-		add(enemyPokemonName);
-
-		scaledEnemyIcon = new ImageIcon();
-
-		enemySprite = new JLabel("");
-		enemySprite.setBounds(432, 106, 164, 145);
-		add(enemySprite);
-
-		scaledAllyIcon = new ImageIcon();
-
-		allySprite = new JLabel("");
-		allySprite.setBounds(136, 298, 164, 145);
-		add(allySprite);
-
-		attackBtn_1 = new JLabel();
-		attackBtn_1.setHorizontalAlignment(SwingConstants.CENTER);
-		attackBtn_1.setForeground(Color.RED);
-		attackBtn_1.setFont(new Font("Tahoma", Font.BOLD, 20));
-		attackBtn_1.setBounds(68, 463, 163, 55);
-		add(attackBtn_1);
-		attackBtn_1.setVisible(false);
-
-		attackBtn_2 = new JLabel();
-		attackBtn_2.setHorizontalAlignment(SwingConstants.CENTER);
-		attackBtn_2.setForeground(Color.RED);
-		attackBtn_2.setFont(new Font("Tahoma", Font.BOLD, 20));
-		attackBtn_2.setBounds(68, 530, 163, 55);
-		add(attackBtn_2);
-		attackBtn_2.setVisible(false);
-
-		attackBtn_3 = new JLabel();
-		attackBtn_3.setHorizontalAlignment(SwingConstants.CENTER);
-		attackBtn_3.setForeground(Color.RED);
-		attackBtn_3.setFont(new Font("Tahoma", Font.BOLD, 20));
-		attackBtn_3.setBounds(337, 530, 163, 55);
-		add(attackBtn_3);
-		attackBtn_3.setVisible(false);
-
-		attackBtn_4 = new JLabel();
-		attackBtn_4.setHorizontalAlignment(SwingConstants.CENTER);
-		attackBtn_4.setForeground(Color.RED);
-		attackBtn_4.setFont(new Font("Tahoma", Font.BOLD, 20));
-		attackBtn_4.setBounds(337, 463, 163, 55);
-		add(attackBtn_4);
-		attackBtn_4.setVisible(false);
-
-		JLabel allyPokemonLifeBarLbl = new JLabel();
-		allyPokemonLifeBarLbl.setBounds(488, 306, 299, 111);
-		allyPokemonLifeBarLbl.setIcon(new ImageIcon("contents/pokemonStatus/pokemonLifeBar.png"));
-		add(allyPokemonLifeBarLbl);
-
-		JLabel enemyLifeBarLbl = new JLabel();
-		enemyLifeBarLbl.setBounds(0, 11, 299, 80);
-		enemyLifeBarLbl.setIcon(new ImageIcon("contents/pokemonStatus/enemyLifeBar.png"));
-		add(enemyLifeBarLbl);
 
 		JLabel layoutFirstClrLbl = new JLabel("");
 		layoutFirstClrLbl.setForeground(new Color(0, 0, 0));
@@ -296,11 +301,6 @@ public class GamePanel extends JPanel {
 		layoutFirstClrLbl.setIcon(new ImageIcon("contents/layoutColours/DecissionMenuClr.png"));
 		layoutFirstClrLbl.setBounds(0, 443, 800, 157);
 		add(layoutFirstClrLbl);
-
-		JLabel fightBackgroundLbl = new JLabel("");
-		fightBackgroundLbl.setIcon(getBackgroundImage());
-		fightBackgroundLbl.setBounds(0, 0, 800, 443);
-		add(fightBackgroundLbl);
 
 		setPreferredSize(new Dimension(800, 600));
 	}
