@@ -31,5 +31,4 @@ public class PokemonFightFrame extends JFrame {
 		pack();
 		setLocationRelativeTo(null);
 	}
-
 }

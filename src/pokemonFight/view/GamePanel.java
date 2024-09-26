@@ -330,7 +330,7 @@ public class GamePanel extends JPanel {
 				doDamage(combat.get(0).getPokemonAttack3());
 			}
 		});
-		if (null != combat.get(0).getPokemonAttack3())
+		if (null != combat.get(0).getPokemonAttack4())
 			attackBtn_4.setText(combat.get(0).getPokemonAttack4().getAttackName());
 		attackBtn_4.addMouseListener(new MouseAdapter() {
 			@Override
@@ -461,5 +461,6 @@ public class GamePanel extends JPanel {
 		int newHealth = enemyPokemonLifeBar.getValue() - (int) dealtAttack;
 		enemyPokemonLifeBar.setValue(newHealth);
 		enemyPokemonLifeBar.repaint();
+		enemyPokemon.setPokemonHP(newHealth);
 	}
 }
