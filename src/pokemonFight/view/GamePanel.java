@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
+import pokemonFight.controller.SongController;
 import pokemonFight.manager.FightManager;
 import pokemonFight.manager.ImageManager;
 import pokemonFight.manager.PokemonManager;
@@ -195,7 +196,7 @@ public class GamePanel extends JPanel {
 			swapBtn.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
-					
+
 				}
 			});
 			swapBtn.setHorizontalAlignment(SwingConstants.CENTER);
@@ -291,9 +292,15 @@ public class GamePanel extends JPanel {
 		layoutFirstClrLbl.setBounds(0, 443, 800, 157);
 		add(layoutFirstClrLbl);
 
-		setPreferredSize(new Dimension(800, 600));
+			SongController.playRandomSong();
+			setPreferredSize(new Dimension(800, 600));
 	}
 
+	/**
+	 * Metodo para conseguir un fondo random de la galeria
+	 * 
+	 * @return Imagen de fondo
+	 */
 	public ImageIcon getBackgroundImage() {
 		ImageIcon background = null;
 		List<ImageIcon> backgrounds = new ArrayList<>();
@@ -304,6 +311,9 @@ public class GamePanel extends JPanel {
 		return background;
 	}
 
+	/**
+	 * añadir nombres y eventos a los labels de ataques de los pokemon
+	 */
 	public void loadPokemonAttacks() {
 		if (null != combat.get(0).getPokemonAttack1())
 			attackBtn_1.setText(combat.get(0).getPokemonAttack1().getAttackName());
@@ -340,6 +350,11 @@ public class GamePanel extends JPanel {
 		});
 	}
 
+	/**
+	 * Refresca la pantalla si un pokemon ha sido cambiado.
+	 * 
+	 * @param allyPokemonTeam
+	 */
 	public void refreshOverlayData(List<Pokemon> allyPokemonTeam) {
 		allyPokemon = allyPokemonTeam.get(0);
 		enemyPokemon = enemyPokemonTeam.get(0);
@@ -369,6 +384,12 @@ public class GamePanel extends JPanel {
 		allySprite.setIcon(scaledAllyIcon);
 	}
 
+	/**
+	 * metodo inicial para seleccionar los pokemon
+	 * @param message
+	 * @return equipo inicial para el combate
+	 * @throws IOException
+	 */
 	public List<Pokemon> selectTeamPokemons(String message) throws IOException {
 		JOptionPane.showMessageDialog(null, message, "Bienvenido!!", JOptionPane.INFORMATION_MESSAGE);
 		List<Pokemon> selectablePokemon = new PokemonManager().getPokemons();
@@ -406,8 +427,13 @@ public class GamePanel extends JPanel {
 		return selectedPokemons;
 	}
 
+	/**
+	 * Para cambiar los pokemon del arrayList y sacar a otro.
+	 * @param team
+	 * @return el equipo modificado
+	 */
 	public List<Pokemon> changePokemon(List<Pokemon> team) {
-		
+
 		String selectablePokemonNames = null;
 
 		DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<String>();
@@ -438,16 +464,24 @@ public class GamePanel extends JPanel {
 		}
 		return team;
 	}
-	
+
+	/**
+	 * comprobar si los ataques no estan vacios
+	 * @return true si no son nulos o no tienen texto
+	 */
 	private boolean checkAttackButtons() {
-		if (attackBtn_1 != null && attackBtn_1.getText() != null && attackBtn_2 != null
-				&& attackBtn_2.getText() != null && attackBtn_3 != null && attackBtn_3.getText() != null
-				&& attackBtn_4 != null && attackBtn_4.getText() != null)
+		if (attackBtn_1 != null && attackBtn_1.getText() != null && attackBtn_2 != null && attackBtn_2.getText() != null
+				&& attackBtn_3 != null && attackBtn_3.getText() != null && attackBtn_4 != null
+				&& attackBtn_4.getText() != null)
 			return true;
 		else
 			return false;
 	}
 
+	/**
+	 * 
+	 * @param pokemonAttack
+	 */
 	private void doDamage(Attack pokemonAttack) {
 		long dealtAttack = new FightManager().calculateAttackDamage(pokemonAttack, combat.get(1), combat.get(0));
 		if (dealtAttack > 0) {
@@ -457,6 +491,9 @@ public class GamePanel extends JPanel {
 		}
 	}
 
+	/*
+	 * 
+	 */
 	private void calculatePokemonLife(long dealtAttack) {
 		int newHealth = enemyPokemonLifeBar.getValue() - (int) dealtAttack;
 		enemyPokemonLifeBar.setValue(newHealth);
