@@ -1,5 +1,6 @@
 package pokemonFight.manager;
 
+import pokemonFight.controller.SongController;
 import pokemonFight.view.GamePanel;
 
 public class StatusSingleton {
@@ -7,6 +8,8 @@ public class StatusSingleton {
 	private static StatusSingleton statusSingleton = null;
 	
 	private GamePanel gamePanel = null;
+	
+	private SongController songController = null;
 	
 	public StatusSingleton() {
     }
@@ -25,5 +28,13 @@ public class StatusSingleton {
 	public void setGamePanel(GamePanel gamePanel) {
 		this.gamePanel = gamePanel;
 	}
-
+	
+	 public SongController getSongController() {
+	    	return songController;
+	    }
+	 
+	public void setSongController(SongController songController) {
+		this.songController = songController;
+	}
+	
 }

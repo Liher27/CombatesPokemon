@@ -21,14 +21,14 @@ public class PokemonFightFrame extends JFrame {
 
 		try {
 			gamePanel = new GamePanel();
+			
+			add(gamePanel);
+
+			pack();
+			setLocationRelativeTo(null);
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "No se han podido cargar las imagenes de los pokemon correctamente",
 					"Error", JOptionPane.ERROR_MESSAGE);
 		}
-
-		add(gamePanel);
-
-		pack();
-		setLocationRelativeTo(null);
 	}
 }

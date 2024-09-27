@@ -21,12 +21,12 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
+import pokemonFight.controller.KeyController;
 import pokemonFight.controller.SongController;
 import pokemonFight.manager.FightManager;
 import pokemonFight.manager.ImageManager;
 import pokemonFight.manager.PokemonManager;
 import pokemonFight.manager.StatusSingleton;
-import pokemonFight.manager.pojo.Attack;
 import pokemonFight.manager.pojo.Pokemon;
 
 public class GamePanel extends JPanel {
@@ -68,6 +68,12 @@ public class GamePanel extends JPanel {
 		enemyPokemonTeam = selectTeamPokemons("Selecciona los pokemon para el equipo enemigo!!");
 
 		setLayout(null);
+
+		this.setDoubleBuffered(true);
+
+		this.addKeyListener(new KeyController());
+		this.setFocusable(true);
+		this.requestFocusInWindow();
 
 		enemyLvlLbl = new JLabel();
 		enemyLvlLbl.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -278,22 +284,25 @@ public class GamePanel extends JPanel {
 			attackBtn.setBounds(488, 464, 133, 55);
 			add(attackBtn);
 
-			loadPokemonAttacks();
+			JLabel layoutFirstClrLbl = new JLabel("");
+			layoutFirstClrLbl.setForeground(new Color(0, 0, 0));
+			layoutFirstClrLbl.setFont(new Font("Tahoma", Font.BOLD, 28));
+			layoutFirstClrLbl.setHorizontalAlignment(SwingConstants.CENTER);
+			layoutFirstClrLbl.setIcon(new ImageIcon("contents/layoutColours/DecissionMenuClr.png"));
+			layoutFirstClrLbl.setBounds(0, 443, 800, 157);
+			add(layoutFirstClrLbl);
+
+			StatusSingleton.getInstance().getSongController();
+			SongController.playRandomSong();
+			setPreferredSize(new Dimension(800, 600));
+
+			FightManager fightManager = new FightManager();
+			fightManager.startCombat();
 		} else {
 			JOptionPane.showMessageDialog(null, "No se han seleccionado pokemon en algun equipo.", "ERROR!",
 					JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
 		}
-
-		JLabel layoutFirstClrLbl = new JLabel("");
-		layoutFirstClrLbl.setForeground(new Color(0, 0, 0));
-		layoutFirstClrLbl.setFont(new Font("Tahoma", Font.BOLD, 28));
-		layoutFirstClrLbl.setHorizontalAlignment(SwingConstants.CENTER);
-		layoutFirstClrLbl.setIcon(new ImageIcon("contents/layoutColours/DecissionMenuClr.png"));
-		layoutFirstClrLbl.setBounds(0, 443, 800, 157);
-		add(layoutFirstClrLbl);
-
-			SongController.playRandomSong();
-			setPreferredSize(new Dimension(800, 600));
 	}
 
 	/**
@@ -312,46 +321,7 @@ public class GamePanel extends JPanel {
 	}
 
 	/**
-	 * añadir nombres y eventos a los labels de ataques de los pokemon
-	 */
-	public void loadPokemonAttacks() {
-		if (null != combat.get(0).getPokemonAttack1())
-			attackBtn_1.setText(combat.get(0).getPokemonAttack1().getAttackName());
-		attackBtn_1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				doDamage(combat.get(0).getPokemonAttack1());
-			}
-
-		});
-		if (null != combat.get(0).getPokemonAttack2())
-			attackBtn_2.setText(combat.get(0).getPokemonAttack2().getAttackName());
-		attackBtn_2.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				doDamage(combat.get(0).getPokemonAttack2());
-			}
-		});
-		if (null != combat.get(0).getPokemonAttack3())
-			attackBtn_3.setText(combat.get(0).getPokemonAttack3().getAttackName());
-		attackBtn_3.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				doDamage(combat.get(0).getPokemonAttack3());
-			}
-		});
-		if (null != combat.get(0).getPokemonAttack4())
-			attackBtn_4.setText(combat.get(0).getPokemonAttack4().getAttackName());
-		attackBtn_4.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				doDamage(combat.get(0).getPokemonAttack4());
-			}
-		});
-	}
-
-	/**
-	 * Refresca la pantalla si un pokemon ha sido cambiado.
+	 * Refresca la pantalla con nueva información de los pokemon.
 	 * 
 	 * @param allyPokemonTeam
 	 */
@@ -386,6 +356,7 @@ public class GamePanel extends JPanel {
 
 	/**
 	 * metodo inicial para seleccionar los pokemon
+	 * 
 	 * @param message
 	 * @return equipo inicial para el combate
 	 * @throws IOException
@@ -429,6 +400,7 @@ public class GamePanel extends JPanel {
 
 	/**
 	 * Para cambiar los pokemon del arrayList y sacar a otro.
+	 * 
 	 * @param team
 	 * @return el equipo modificado
 	 */
@@ -465,10 +437,6 @@ public class GamePanel extends JPanel {
 		return team;
 	}
 
-	/**
-	 * comprobar si los ataques no estan vacios
-	 * @return true si no son nulos o no tienen texto
-	 */
 	private boolean checkAttackButtons() {
 		if (attackBtn_1 != null && attackBtn_1.getText() != null && attackBtn_2 != null && attackBtn_2.getText() != null
 				&& attackBtn_3 != null && attackBtn_3.getText() != null && attackBtn_4 != null
@@ -476,28 +444,5 @@ public class GamePanel extends JPanel {
 			return true;
 		else
 			return false;
-	}
-
-	/**
-	 * 
-	 * @param pokemonAttack
-	 */
-	private void doDamage(Attack pokemonAttack) {
-		long dealtAttack = new FightManager().calculateAttackDamage(pokemonAttack, combat.get(1), combat.get(0));
-		if (dealtAttack > 0) {
-			calculatePokemonLife(dealtAttack);
-		} else {
-			JOptionPane.showMessageDialog(null, "El ataque ha fallado!!!", "Mala suerte...", JOptionPane.ERROR_MESSAGE);
-		}
-	}
-
-	/*
-	 * 
-	 */
-	private void calculatePokemonLife(long dealtAttack) {
-		int newHealth = enemyPokemonLifeBar.getValue() - (int) dealtAttack;
-		enemyPokemonLifeBar.setValue(newHealth);
-		enemyPokemonLifeBar.repaint();
-		enemyPokemon.setPokemonHP(newHealth);
 	}
 }

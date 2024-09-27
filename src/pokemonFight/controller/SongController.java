@@ -1,6 +1,7 @@
 package pokemonFight.controller;
 
 import java.util.Random;
+import pokemonFight.manager.StatusSingleton;
 import javax.sound.sampled.*;
 
 public class SongController {
@@ -21,6 +22,7 @@ public class SongController {
 			clip = AudioSystem.getClip();
 			clip.open(audioInputStream);
 			 clip.addLineListener(new SongLineListener());
+			 StatusSingleton.getInstance().setSongController(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -35,9 +37,7 @@ public class SongController {
 	}
 
 	public void stop() {
-		if (clip.isRunning()) {
-			clip.stop();
-		}
+			clip.close();
 	}
 
 	public void restart() {
