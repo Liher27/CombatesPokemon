@@ -157,8 +157,6 @@ public class GamePanel extends JPanel {
 				JOptionPane.showMessageDialog(null, "Error general", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 
-			combat = new FightManager().calculateTurn(combat);
-
 			decissionTextLbl = new JLabel("¿Que deberia hacer " + combat.get(0).getPokemonName() + "?");
 			decissionTextLbl.setForeground(new Color(255, 255, 255));
 			decissionTextLbl.setHorizontalAlignment(SwingConstants.CENTER);
@@ -297,7 +295,7 @@ public class GamePanel extends JPanel {
 			setPreferredSize(new Dimension(800, 600));
 
 			FightManager fightManager = new FightManager();
-			fightManager.startCombat();
+			fightManager.trainerBattle();
 		} else {
 			JOptionPane.showMessageDialog(null, "No se han seleccionado pokemon en algun equipo.", "ERROR!",
 					JOptionPane.ERROR_MESSAGE);
@@ -318,40 +316,6 @@ public class GamePanel extends JPanel {
 		backgrounds = new ImageManager().getBackgrounds();
 		background = backgrounds.get(randomBackground);
 		return background;
-	}
-
-	/**
-	 * Refresca la pantalla con nueva información de los pokemon.
-	 * 
-	 * @param allyPokemonTeam
-	 */
-	public void refreshOverlayData(List<Pokemon> allyPokemonTeam) {
-		allyPokemon = allyPokemonTeam.get(0);
-		enemyPokemon = enemyPokemonTeam.get(0);
-		allyPokemonLifeBar = new JProgressBar(0, allyPokemonTeam.get(0).getPokemonHP());
-		allyPokemonName.setText(allyPokemonTeam.get(0).getPokemonName());
-		allyLvlLbl.setText(allyPokemonTeam.get(0).getPokemonLvl() + "");
-		decissionTextLbl.setText("¿Que deberia hacer " + allyPokemonTeam.get(0).getPokemonName() + "?");
-		if (null != allyPokemonTeam.get(0).getPokemonAttack1())
-			attackBtn_1.setText(allyPokemonTeam.get(0).getPokemonAttack1().getAttackName());
-		else
-			attackBtn_1.setText("");
-		if (null != allyPokemonTeam.get(0).getPokemonAttack2())
-			attackBtn_2.setText(allyPokemonTeam.get(0).getPokemonAttack2().getAttackName());
-		else
-			attackBtn_2.setText("");
-		if (null != allyPokemonTeam.get(0).getPokemonAttack3())
-			attackBtn_3.setText(allyPokemonTeam.get(0).getPokemonAttack3().getAttackName());
-		else
-			attackBtn_3.setText("");
-		if (null != allyPokemonTeam.get(0).getPokemonAttack4())
-			attackBtn_4.setText(allyPokemonTeam.get(0).getPokemonAttack4().getAttackName());
-		else
-			attackBtn_4.setText("");
-
-		scaledAllyIcon = new ImageIcon(
-				allyPokemonTeam.get(0).getPokemonBack().getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH));
-		allySprite.setIcon(scaledAllyIcon);
 	}
 
 	/**

@@ -86,6 +86,10 @@ public class Pokemon {
 		this.pokemonName = pokemonName;
 	}
 
+	public Attack getPokemonAttack(int attack) {
+		return pokemonAttack1;
+	}
+	
 	public Attack getPokemonAttack1() {
 		return pokemonAttack1;
 	}

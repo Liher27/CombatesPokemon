@@ -21,8 +21,8 @@ public class SongController {
 					.getAudioInputStream(SongController.class.getResource(filename));
 			clip = AudioSystem.getClip();
 			clip.open(audioInputStream);
-			 clip.addLineListener(new SongLineListener());
-			 StatusSingleton.getInstance().setSongController(this);
+			clip.addLineListener(new SongLineListener());
+			StatusSingleton.getInstance().setSongController(this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -32,11 +32,13 @@ public class SongController {
 		if (clip.isRunning()) {
 			clip.stop();
 		}
-		clip.setFramePosition(0);
+		clip.drain();
+		clip.flush();
 		clip.start();
 	}
 
 	public void stop() {
+		if (clip.isRunning())
 			clip.close();
 	}
 
@@ -44,20 +46,21 @@ public class SongController {
 		stop();
 		play();
 	}
-	
-    public static void playRandomSong() {
-        Random random = new Random();
-        int randomIndex = random.nextInt(songs.length);
-        songs[randomIndex].play();
-        
-    }
-    //Clase interna para que cuando una cancion termine inicie otra de forma random
-    private class SongLineListener implements LineListener {
-        @Override
-        public void update(LineEvent event) {
-            if (event.getType() == LineEvent.Type.STOP) {
-                playRandomSong();
-            }
-        }
-    }
+
+	public static void playRandomSong() {
+		Random random = new Random();
+		int randomIndex = random.nextInt(songs.length);
+		songs[randomIndex].play();
+
+	}
+
+	// Clase interna para que cuando una cancion termine inicie otra de forma random
+	private class SongLineListener implements LineListener {
+		@Override
+		public void update(LineEvent event) {
+			if (event.getType() == LineEvent.Type.STOP) {
+				playRandomSong();
+			}
+		}
+	}
 }
