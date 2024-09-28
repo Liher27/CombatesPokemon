@@ -3,7 +3,6 @@ package pokemonFight.view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -12,6 +11,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -21,12 +22,12 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
-import pokemonFight.controller.KeyController;
 import pokemonFight.controller.SongController;
 import pokemonFight.manager.FightManager;
 import pokemonFight.manager.ImageManager;
 import pokemonFight.manager.PokemonManager;
 import pokemonFight.manager.StatusSingleton;
+import pokemonFight.manager.pojo.Item;
 import pokemonFight.manager.pojo.Pokemon;
 
 public class GamePanel extends JPanel {
@@ -36,10 +37,15 @@ public class GamePanel extends JPanel {
 	public List<Pokemon> allyPokemonTeam = null;
 	public List<Pokemon> enemyPokemonTeam = null;
 	public List<Pokemon> combat = null;
+	
+	public List<Item> allyHeldItems = null;
+	public List<Item> enemyHeldItems = null;
 
 	public Pokemon allyPokemon = null;
 	public Pokemon enemyPokemon = null;
 
+	public FightManager fightManager = null;
+	
 	public JLabel allyLvlLbl = null;
 	public JLabel enemyLvlLbl = null;
 	public JLabel enemyPokemonName = null;
@@ -52,7 +58,10 @@ public class GamePanel extends JPanel {
 	public JLabel attackBtn_2 = null;
 	public JLabel attackBtn_3 = null;
 	public JLabel attackBtn_4 = null;
-
+	public JLabel swapBtn = null;
+	public JLabel itemBtn = null;
+	public JLabel defendBtn = null;
+	
 	public JProgressBar allyPokemonLifeBar = null;
 	public JProgressBar enemyPokemonLifeBar = null;
 
@@ -71,7 +80,6 @@ public class GamePanel extends JPanel {
 
 		this.setDoubleBuffered(true);
 
-		this.addKeyListener(new KeyController());
 		this.setFocusable(true);
 		this.requestFocusInWindow();
 
@@ -157,7 +165,7 @@ public class GamePanel extends JPanel {
 				JOptionPane.showMessageDialog(null, "Error general", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 
-			decissionTextLbl = new JLabel("¿Que deberia hacer " + combat.get(0).getPokemonName() + "?");
+			decissionTextLbl = new JLabel();
 			decissionTextLbl.setForeground(new Color(255, 255, 255));
 			decissionTextLbl.setHorizontalAlignment(SwingConstants.CENTER);
 			decissionTextLbl.setFont(new Font("Tahoma", Font.BOLD, 24));
@@ -196,36 +204,25 @@ public class GamePanel extends JPanel {
 			add(attackBtn_4);
 			attackBtn_4.setVisible(false);
 
-			JLabel swapBtn = new JLabel("Cambiar");
-			swapBtn.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-
-				}
-			});
+			swapBtn = new JLabel("Cambiar");
 			swapBtn.setHorizontalAlignment(SwingConstants.CENTER);
 			swapBtn.setForeground(new Color(237, 230, 80));
 			swapBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
 			swapBtn.setBounds(652, 463, 133, 55);
 			add(swapBtn);
 
-			JLabel itemBtn = new JLabel("Objetos");
-			itemBtn.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-				}
-			});
+			itemBtn = new JLabel("Objetos");
 			itemBtn.setHorizontalAlignment(SwingConstants.CENTER);
 			itemBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
 			itemBtn.setBounds(667, 530, 133, 55);
 			add(itemBtn);
 
-			JLabel defendBtn = new JLabel("Defenderse");
-			defendBtn.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-				}
-			});
+			defendBtn = new JLabel("Defenderse");
+//			defendBtn.addMouseListener(new MouseAdapter() {
+//				@Override
+//				public void mouseClicked(MouseEvent e) {
+//				}
+//			});
 			defendBtn.setHorizontalAlignment(SwingConstants.CENTER);
 			defendBtn.setForeground(new Color(0, 128, 255));
 			defendBtn.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -265,14 +262,13 @@ public class GamePanel extends JPanel {
 					swapBtn.setVisible(false);
 					defendBtn.setVisible(false);
 					attackBtn.setVisible(false);
+					backBtn.setVisible(true);
 					if (checkAttackButtons()) {
 						attackBtn_1.setVisible(true);
 						attackBtn_2.setVisible(true);
 						attackBtn_3.setVisible(true);
 						attackBtn_4.setVisible(true);
 					}
-					backBtn.setVisible(true);
-
 				}
 			});
 
@@ -290,8 +286,20 @@ public class GamePanel extends JPanel {
 			layoutFirstClrLbl.setBounds(0, 443, 800, 157);
 			add(layoutFirstClrLbl);
 
-			StatusSingleton.getInstance().getSongController();
-			SongController.playRandomSong();
+			
+			try {
+				StatusSingleton.getInstance().getSongController();
+				SongController.playRandomSong();
+			} catch (LineUnavailableException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (UnsupportedAudioFileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			setPreferredSize(new Dimension(800, 600));
 
 			FightManager fightManager = new FightManager();
@@ -369,7 +377,6 @@ public class GamePanel extends JPanel {
 	 * @return el equipo modificado
 	 */
 	public List<Pokemon> changePokemon(List<Pokemon> team) {
-
 		String selectablePokemonNames = null;
 
 		DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<String>();
@@ -399,6 +406,13 @@ public class GamePanel extends JPanel {
 			}
 		}
 		return team;
+	}
+	
+	public void stopBattle() {
+		fightManager = new FightManager();
+	    if (fightManager.battleWorker != null && !fightManager.battleWorker.isDone()) {
+	    	fightManager.battleWorker.cancel(true); 
+	    }
 	}
 
 	private boolean checkAttackButtons() {

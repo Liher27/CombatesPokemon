@@ -1,5 +1,7 @@
 package pokemonFight.view;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 import javax.swing.JFrame;
@@ -17,15 +19,22 @@ public class PokemonFightFrame extends JFrame {
 		setResizable(false);
 		setTitle("Combates Pokemon!!!");
 
-		GamePanel gamePanel = null;
-
 		try {
-			gamePanel = new GamePanel();
-			
+			GamePanel gamePanel = new GamePanel();
+
 			add(gamePanel);
+
+			addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowClosing(WindowEvent e) {
+					gamePanel.stopBattle();
+					System.exit(0);
+				}
+			});
 
 			pack();
 			setLocationRelativeTo(null);
+
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "No se han podido cargar las imagenes de los pokemon correctamente",
 					"Error", JOptionPane.ERROR_MESSAGE);
