@@ -73,11 +73,10 @@ public class FightManager {
 	}
 
 	private void setupAttackButtons(Pokemon pokemon, boolean isAlly) {
-		removeAllMouseListeners(gamePanel.attackBtn_1);
-		removeAllMouseListeners(gamePanel.attackBtn_2);
-		removeAllMouseListeners(gamePanel.attackBtn_3);
-		removeAllMouseListeners(gamePanel.attackBtn_4);
-		removeAllMouseListeners(gamePanel.swapBtn);
+		JLabel[] buttonList = { gamePanel.attackBtn_1, gamePanel.attackBtn_2, gamePanel.attackBtn_3,
+				gamePanel.attackBtn_4, gamePanel.swapBtn, gamePanel.defendBtn
+		};
+		removeAllMouseListeners(buttonList);
 
 		if (pokemon.getPokemonAttack1() != null) {
 			gamePanel.attackBtn_1.setText(pokemon.getPokemonAttack1().getAttackName());
@@ -133,13 +132,8 @@ public class FightManager {
 		gamePanel.defendBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(isAlly) {
-					int defenseUp = (int) (allyPokemonTeam.get(0).getPokemonDefense()*1.25);
-					allyPokemonTeam.get(0).setPokemonDefense(defenseUp);
-				}else {
-					int defenseUp = (int) (enemyPokemonTeam.get(0).getPokemonDefense()*1.25);
-					enemyPokemonTeam.get(0).setPokemonDefense(defenseUp);
-				}
+				handleDefense(isAlly);
+				turn = !turn;
 			}
 		});
 
@@ -163,9 +157,11 @@ public class FightManager {
 		});
 	}
 
-	private void removeAllMouseListeners(JLabel label) {
-		for (MouseListener ml : label.getMouseListeners()) {
-			label.removeMouseListener(ml);
+	private void removeAllMouseListeners(JLabel[] buttonList) {
+		for (int i = 0; i < buttonList.length; i++) {
+			for (MouseListener ml : buttonList[i].getMouseListeners()) {
+				buttonList[i].removeMouseListener(ml);
+			}
 		}
 	}
 
@@ -281,5 +277,20 @@ public class FightManager {
 				* attackingPokemon.getPokemonAttackStat()) / (25 * deffensorPokemon.getPokemonDefense() + 2)));
 
 		return baseDamage;
+	}
+
+	private void handleDefense(boolean isAlly) {
+		if (isAlly) {
+			int defenseUp = (int) (allyPokemonTeam.get(0).getPokemonDefense() * 1.75);
+			allyPokemonTeam.get(0).setPokemonDefense(defenseUp);
+			JOptionPane.showMessageDialog(null, "Tu defensa ha aumentado!!!", "Bien!!!",
+					JOptionPane.INFORMATION_MESSAGE);
+		} else {
+			int defenseUp = (int) (enemyPokemonTeam.get(0).getPokemonDefense() * 1.75);
+			enemyPokemonTeam.get(0).setPokemonDefense(defenseUp);
+			JOptionPane.showMessageDialog(null, "Tu defensa ha aumentado!!!", "Bien!!!",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
+
 	}
 }
