@@ -213,11 +213,6 @@ public class GamePanel extends JPanel {
 			add(itemBtn);
 
 			defendBtn = new JLabel("Defenderse");
-//			defendBtn.addMouseListener(new MouseAdapter() {
-//				@Override
-//				public void mouseClicked(MouseEvent e) {
-//				}
-//			});
 			defendBtn.setHorizontalAlignment(SwingConstants.CENTER);
 			defendBtn.setForeground(new Color(0, 128, 255));
 			defendBtn.setFont(new Font("Tahoma", Font.BOLD, 20));

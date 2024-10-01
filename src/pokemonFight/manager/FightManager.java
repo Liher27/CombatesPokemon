@@ -130,19 +130,31 @@ public class FightManager {
 		} else
 			gamePanel.attackBtn_4.setText("");
 
+		gamePanel.defendBtn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(isAlly) {
+					int defenseUp = (int) (allyPokemonTeam.get(0).getPokemonDefense()*1.25);
+					allyPokemonTeam.get(0).setPokemonDefense(defenseUp);
+				}else {
+					int defenseUp = (int) (enemyPokemonTeam.get(0).getPokemonDefense()*1.25);
+					enemyPokemonTeam.get(0).setPokemonDefense(defenseUp);
+				}
+			}
+		});
+
 		gamePanel.swapBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(isAlly&&allyPokemonTeam.size()>1 ||!isAlly && enemyPokemonTeam.size()>1) {
+				if (isAlly && allyPokemonTeam.size() > 1 || !isAlly && enemyPokemonTeam.size() > 1) {
 					if (isAlly) {
 						allyPokemonTeam = gamePanel.changePokemon(allyPokemonTeam);
 						refreshOverlayData(allyPokemonTeam, isAlly);
-					}
-					else {
+					} else {
 						enemyPokemonTeam = gamePanel.changePokemon(enemyPokemonTeam);
-						refreshOverlayData(enemyPokemonTeam, isAlly);	
+						refreshOverlayData(enemyPokemonTeam, isAlly);
 					}
-				}else {
+				} else {
 					JOptionPane.showMessageDialog(null, "No quedan pokemon en tu equipo...!!!", "Oh oh...",
 							JOptionPane.INFORMATION_MESSAGE);
 				}
