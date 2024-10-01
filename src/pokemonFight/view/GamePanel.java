@@ -84,12 +84,12 @@ public class GamePanel extends JPanel {
 		this.requestFocusInWindow();
 
 		enemyLvlLbl = new JLabel();
-		enemyLvlLbl.setFont(new Font("Tahoma", Font.BOLD, 16));
+		enemyLvlLbl.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		enemyLvlLbl.setBounds(244, 11, 28, 51);
 		add(enemyLvlLbl);
 
 		allyLvlLbl = new JLabel();
-		allyLvlLbl.setFont(new Font("Tahoma", Font.BOLD, 16));
+		allyLvlLbl.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		allyLvlLbl.setBounds(747, 310, 28, 51);
 		add(allyLvlLbl);
 

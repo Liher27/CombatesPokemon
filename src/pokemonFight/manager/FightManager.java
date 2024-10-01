@@ -29,7 +29,9 @@ public class FightManager {
 
 	public void loadInfo() throws NullPointerException, IOException, Exception {
 		gamePanel.allyPokemonLifeBar.setMaximum(allyPokemonTeam.get(0).getPokemonHP());
+		gamePanel.allyPokemonLifeBar.setValue(allyPokemonTeam.get(0).getPokemonHP());
 		gamePanel.enemyPokemonLifeBar.setMaximum(enemyPokemonTeam.get(0).getPokemonHP());
+		gamePanel.enemyPokemonLifeBar.setValue(enemyPokemonTeam.get(0).getPokemonHP());
 		gamePanel.enemyLvlLbl.setText(gamePanel.enemyPokemonTeam.get(0).getPokemonLvl() + "");
 		gamePanel.allyLvlLbl.setText(gamePanel.allyPokemonTeam.get(0).getPokemonLvl() + "");
 		gamePanel.enemyPokemonName.setText(gamePanel.enemyPokemonTeam.get(0).getPokemonName());
@@ -43,7 +45,7 @@ public class FightManager {
 			protected Void doInBackground() {
 				boolean continueBattle = true;
 
-				while (continueBattle) {
+				do {
 					SwingUtilities.invokeLater(() -> handleTurn(turn));
 					if (battleEnded()) {
 						continueBattle = false;
@@ -53,7 +55,7 @@ public class FightManager {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-				}
+				} while (continueBattle);
 				return null;
 			}
 		};
@@ -127,16 +129,23 @@ public class FightManager {
 			});
 		} else
 			gamePanel.attackBtn_4.setText("");
-		gamePanel.swapBtn.addMouseListener(new MouseAdapter() {
 
+		gamePanel.swapBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (isAlly)
-					allyPokemonTeam = gamePanel.changePokemon(allyPokemonTeam);
-				else
-					enemyPokemonTeam = gamePanel.changePokemon(enemyPokemonTeam);
-
-				turn = !turn;
+				if(isAlly&&allyPokemonTeam.size()>1 ||!isAlly && enemyPokemonTeam.size()>1) {
+					if (isAlly) {
+						allyPokemonTeam = gamePanel.changePokemon(allyPokemonTeam);
+						refreshOverlayData(allyPokemonTeam, isAlly);
+					}
+					else {
+						enemyPokemonTeam = gamePanel.changePokemon(enemyPokemonTeam);
+						refreshOverlayData(enemyPokemonTeam, isAlly);	
+					}
+				}else {
+					JOptionPane.showMessageDialog(null, "No quedan pokemon en tu equipo...!!!", "Oh oh...",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
 
 		});
@@ -154,6 +163,7 @@ public class FightManager {
 				enemyPokemonTeam.remove(0);
 				gamePanel.changePokemon(enemyPokemonTeam);
 				refreshOverlayData(allyPokemonTeam, false);
+				turn = !turn;
 			} else {
 				JOptionPane.showMessageDialog(null, "El equipo local ha ganado el combate!!!", "Enhorabuena!!!",
 						JOptionPane.INFORMATION_MESSAGE);
@@ -166,6 +176,7 @@ public class FightManager {
 				allyPokemonTeam.remove(0);
 				gamePanel.changePokemon(allyPokemonTeam);
 				refreshOverlayData(allyPokemonTeam, true);
+				turn = !turn;
 			} else {
 				JOptionPane.showMessageDialog(null, "El equipo visitante ha ganado el combate!!!", "Enhorabuena!!!",
 						JOptionPane.INFORMATION_MESSAGE);
@@ -183,21 +194,27 @@ public class FightManager {
 	 */
 	public void refreshOverlayData(List<Pokemon> team, boolean ally) {
 		if (ally) {
-			gamePanel.allyPokemonLifeBar = new JProgressBar(0, team.get(0).getPokemonHP());
+			gamePanel.allyPokemonLifeBar.setMaximum(team.get(0).getPokemonHP());
+			gamePanel.allyPokemonLifeBar.setMinimum(0);
+			gamePanel.allyPokemonLifeBar.repaint();
 			gamePanel.allyPokemonName.setText(team.get(0).getPokemonName());
 			gamePanel.allyLvlLbl.setText(team.get(0).getPokemonLvl() + "");
 			gamePanel.decissionTextLbl.setText("¿Qué debería hacer " + team.get(0).getPokemonName() + "?");
 			gamePanel.scaledAllyIcon = new ImageIcon(team.get(0).getPokemonBack().getScaledInstance(gamePanel.newWidth,
 					gamePanel.newHeight, Image.SCALE_SMOOTH));
 			gamePanel.allySprite.setIcon(gamePanel.scaledAllyIcon);
+			turn = !turn;
 		} else {
-			gamePanel.enemyPokemonLifeBar = new JProgressBar(0, team.get(0).getPokemonHP());
+			gamePanel.enemyPokemonLifeBar.setMaximum(team.get(0).getPokemonHP());
+			gamePanel.enemyPokemonLifeBar.setMinimum(0);
+			gamePanel.enemyPokemonLifeBar.repaint();
 			gamePanel.enemyPokemonName.setText(team.get(0).getPokemonName());
 			gamePanel.enemyLvlLbl.setText(team.get(0).getPokemonLvl() + "");
 			gamePanel.decissionTextLbl.setText("¿Qué debería hacer " + team.get(0).getPokemonName() + "?");
 			gamePanel.scaledEnemyIcon = new ImageIcon(team.get(0).getPokemonFront()
 					.getScaledInstance(gamePanel.newWidth, gamePanel.newHeight, Image.SCALE_SMOOTH));
 			gamePanel.enemySprite.setIcon(gamePanel.scaledEnemyIcon);
+			turn = !turn;
 		}
 	}
 
@@ -229,7 +246,6 @@ public class FightManager {
 	private void calculatePokemonLife(long dealtAttack, boolean isAlly) {
 		int newHealth = 0;
 		if (isAlly) {
-			gamePanel.allyPokemonLifeBar.repaint();
 			newHealth = enemyPokemonTeam.get(0).getPokemonHP() - (int) dealtAttack;
 			enemyPokemonTeam.get(0).setPokemonHP(newHealth);
 			gamePanel.enemyPokemonLifeBar.setValue(newHealth);
