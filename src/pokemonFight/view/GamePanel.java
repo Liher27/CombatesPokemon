@@ -88,16 +88,6 @@ public class GamePanel extends JPanel {
 		enemyLvlLbl.setBounds(244, 11, 28, 51);
 		add(enemyLvlLbl);
 
-		enemyPokemonLifeBar = new JProgressBar();
-		enemyPokemonLifeBar.setForeground(Color.green);
-		enemyPokemonLifeBar.setBounds(114, 53, 144, 20);
-		add(enemyPokemonLifeBar);
-
-		allyPokemonLifeBar = new JProgressBar();
-		allyPokemonLifeBar.setForeground(Color.green);
-		allyPokemonLifeBar.setBounds(622, 350, 144, 20);
-		add(allyPokemonLifeBar);
-
 		allyLvlLbl = new JLabel();
 		allyLvlLbl.setFont(new Font("Tahoma", Font.BOLD, 16));
 		allyLvlLbl.setBounds(747, 310, 28, 51);
@@ -109,6 +99,16 @@ public class GamePanel extends JPanel {
 		allyPokemonName.setBounds(510, 316, 163, 37);
 		add(allyPokemonName);
 
+		enemyPokemonLifeBar = new JProgressBar();
+		enemyPokemonLifeBar.setForeground(Color.green);
+		enemyPokemonLifeBar.setBounds(114, 53, 144, 20);
+		add(enemyPokemonLifeBar);
+
+		allyPokemonLifeBar = new JProgressBar();
+		allyPokemonLifeBar.setForeground(Color.green);
+		allyPokemonLifeBar.setBounds(622, 350, 144, 20);
+		add(allyPokemonLifeBar);
+		
 		enemyPokemonName = new JLabel();
 		enemyPokemonName.setHorizontalAlignment(SwingConstants.CENTER);
 		enemyPokemonName.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -147,11 +147,6 @@ public class GamePanel extends JPanel {
 		if (!allyPokemonTeam.isEmpty() && !enemyPokemonTeam.isEmpty()) {
 			allyPokemon = allyPokemonTeam.get(0);
 			enemyPokemon = enemyPokemonTeam.get(0);
-
-			combat = new ArrayList<Pokemon>();
-
-			combat.add(allyPokemon);
-			combat.add(enemyPokemon);
 
 			try {
 				new FightManager().loadInfo();

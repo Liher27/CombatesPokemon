@@ -229,6 +229,7 @@ public class FightManager {
 	private void calculatePokemonLife(long dealtAttack, boolean isAlly) {
 		int newHealth = 0;
 		if (isAlly) {
+			gamePanel.allyPokemonLifeBar.repaint();
 			newHealth = enemyPokemonTeam.get(0).getPokemonHP() - (int) dealtAttack;
 			enemyPokemonTeam.get(0).setPokemonHP(newHealth);
 			gamePanel.enemyPokemonLifeBar.setValue(newHealth);
