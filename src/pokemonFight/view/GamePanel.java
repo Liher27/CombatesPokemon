@@ -88,14 +88,14 @@ public class GamePanel extends JPanel {
 		enemyLvlLbl.setBounds(244, 11, 28, 51);
 		add(enemyLvlLbl);
 
-		enemyPokemonLifeBar = new JProgressBar(0, enemyPokemonTeam.get(0).getPokemonHP());
-		enemyPokemonLifeBar.setBackground(Color.green);
+		enemyPokemonLifeBar = new JProgressBar();
+		enemyPokemonLifeBar.setForeground(Color.green);
 		enemyPokemonLifeBar.setBounds(114, 53, 144, 20);
 		add(enemyPokemonLifeBar);
 
-		allyPokemonLifeBar = new JProgressBar(0, allyPokemonTeam.get(0).getPokemonHP());
+		allyPokemonLifeBar = new JProgressBar();
+		allyPokemonLifeBar.setForeground(Color.green);
 		allyPokemonLifeBar.setBounds(622, 350, 144, 20);
-		allyPokemonLifeBar.setBackground(Color.green);
 		add(allyPokemonLifeBar);
 
 		allyLvlLbl = new JLabel();

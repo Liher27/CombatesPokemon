@@ -2,7 +2,7 @@ Bulbasaur,5,45,49,49,45,vineWhip,tackle,null,null
 Ivysaur,16,60,62,63,60,vineWhip,tackle,razorLeaf,null
 Venusaur,70,80,82,83,80,razorLeaf,solarBlade,earthquake,solarBeam
 Charmander,5,39,52,43,65,ember,scratch,null,null
-Charmeleon,16,58,64,58,80,ember,ironTail,dragonClaw,null
+Charmeleon,16,58,64,58,70,ember,ironTail,dragonClaw,null
 Charizard,70,78,84,78,100,fly,ironTail,airSlash,fireBlast
 Squirtle,5,44,48,65,43,waterGun,tackle,null,null
 Wartortle,16,59,63,80,58,waterGun,iceBeam,tackle,null
