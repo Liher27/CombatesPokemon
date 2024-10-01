@@ -28,8 +28,8 @@ public class FightManager {
 	public SwingWorker<Void, Void> battleWorker;
 
 	public void loadInfo() throws NullPointerException, IOException, Exception {
-		gamePanel.enemyPokemonLifeBar = new JProgressBar(0, gamePanel.enemyPokemonTeam.get(0).getPokemonHP());
-		gamePanel.allyPokemonLifeBar = new JProgressBar(0, gamePanel.allyPokemonTeam.get(0).getPokemonHP());
+		gamePanel.allyPokemonLifeBar.setMaximum(allyPokemonTeam.get(0).getPokemonHP());
+		gamePanel.enemyPokemonLifeBar.setValue(enemyPokemonTeam.get(0).getPokemonHP());
 		gamePanel.enemyLvlLbl.setText(gamePanel.enemyPokemonTeam.get(0).getPokemonLvl() + "");
 		gamePanel.allyLvlLbl.setText(gamePanel.allyPokemonTeam.get(0).getPokemonLvl() + "");
 		gamePanel.enemyPokemonName.setText(gamePanel.enemyPokemonTeam.get(0).getPokemonName());
@@ -224,30 +224,36 @@ public class FightManager {
 
 		if (dealtAttack > 0) {
 			calculatePokemonLife(dealtAttack, ally);
-			JOptionPane.showMessageDialog(null, pokemonAttack.getAttackName() + " ha hecho " + dealtAttack + " de daño!",
-					"Ataque acertado", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null,
+					pokemonAttack.getAttackName() + " ha hecho " + dealtAttack + " de daño!", "Ataque acertado",
+					JOptionPane.INFORMATION_MESSAGE);
 		} else {
-			JOptionPane.showMessageDialog(null,dealtAttack + " ha fallado!", "Ataque fallido",
+			JOptionPane.showMessageDialog(null, dealtAttack + " ha fallado!", "Ataque fallido",
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
 	private void calculatePokemonLife(long dealtAttack, boolean isAlly) {
-		int newHealth = 0;
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				int newHealth = 0;
 
-		if (isAlly) {
-			newHealth = enemyPokemonTeam.get(0).getPokemonHP() - (int) dealtAttack;
-			enemyPokemonTeam.get(0).setPokemonHP(newHealth);
-			gamePanel.enemyPokemonLifeBar.setValue(newHealth);
-			gamePanel.enemyPokemonLifeBar.revalidate();
-			gamePanel.enemyPokemonLifeBar.repaint();
-		} else {
-			newHealth = allyPokemonTeam.get(0).getPokemonHP() - (int) dealtAttack;
-			allyPokemonTeam.get(0).setPokemonHP(newHealth);
-			gamePanel.allyPokemonLifeBar.setValue(newHealth);
-			gamePanel.allyPokemonLifeBar.revalidate();
-			gamePanel.allyPokemonLifeBar.repaint();
-		}
+				if (isAlly) {
+					newHealth = enemyPokemonTeam.get(0).getPokemonHP() - (int) dealtAttack;
+					enemyPokemonTeam.get(0).setPokemonHP(newHealth);
+					gamePanel.enemyPokemonLifeBar.setValue(newHealth);
+					gamePanel.enemyPokemonLifeBar.revalidate();
+					gamePanel.enemyPokemonLifeBar.repaint();
+				} else {
+					newHealth = allyPokemonTeam.get(0).getPokemonHP() - (int) dealtAttack;
+					allyPokemonTeam.get(0).setPokemonHP(newHealth);
+					gamePanel.allyPokemonLifeBar.setValue(newHealth);
+					gamePanel.allyPokemonLifeBar.revalidate();
+					gamePanel.allyPokemonLifeBar.repaint();
+				}
+			}
+		});
 	}
 
 	private long calculateAttackDamage(Attack usedAttack, Pokemon deffensorPokemon, Pokemon attackingPokemon) {
@@ -255,9 +261,8 @@ public class FightManager {
 		if (!hit)
 			return 0;
 
-		long baseDamage = Math.round(usedAttack.getAttackPotency()
-				+ (attackingPokemon.getPokemonLvl()*0.01 + attackingPokemon.getPokemonAttackStat() * 0.01)
-				- (deffensorPokemon.getPokemonDefense() + deffensorPokemon.getPokemonLvl() * 0.01));
+		long baseDamage = Math.round((((0.2 * attackingPokemon.getPokemonLvl() + 1) * usedAttack.getAttackPotency()
+				* attackingPokemon.getPokemonAttackStat()) / (25 * deffensorPokemon.getPokemonDefense() + 2)));
 
 		return baseDamage;
 	}

@@ -38,6 +38,7 @@ public class PokemonFightFrame extends JFrame {
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "No se han podido cargar las imagenes de los pokemon correctamente",
 					"Error", JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
 		}
 	}
 }
