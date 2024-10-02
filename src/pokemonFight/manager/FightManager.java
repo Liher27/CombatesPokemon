@@ -74,8 +74,7 @@ public class FightManager {
 
 	private void setupAttackButtons(Pokemon pokemon, boolean isAlly) {
 		JLabel[] buttonList = { gamePanel.attackBtn_1, gamePanel.attackBtn_2, gamePanel.attackBtn_3,
-				gamePanel.attackBtn_4, gamePanel.swapBtn, gamePanel.defendBtn
-		};
+				gamePanel.attackBtn_4, gamePanel.swapBtn, gamePanel.defendBtn };
 		removeAllMouseListeners(buttonList);
 
 		if (pokemon.getPokemonAttack1() != null) {
@@ -149,8 +148,7 @@ public class FightManager {
 						refreshOverlayData(enemyPokemonTeam, isAlly);
 					}
 				} else {
-					JOptionPane.showMessageDialog(null, "No quedan pokemon en tu equipo...!!!", "Oh oh...",
-							JOptionPane.INFORMATION_MESSAGE);
+					writeLog(isAlly, "No quedan pokemon en tu equipo...!!! \n");
 				}
 			}
 
@@ -242,12 +240,9 @@ public class FightManager {
 
 		if (dealtAttack > 0) {
 			calculatePokemonLife(dealtAttack, ally);
-			JOptionPane.showMessageDialog(null,
-					pokemonAttack.getAttackName() + " ha hecho " + dealtAttack + " de daño!", "Ataque acertado",
-					JOptionPane.INFORMATION_MESSAGE);
+			writeLog(ally, (pokemonAttack.getAttackName() + " ha hecho " + dealtAttack + " de daño! \n"));
 		} else {
-			JOptionPane.showMessageDialog(null, dealtAttack + " ha fallado!", "Ataque fallido",
-					JOptionPane.ERROR_MESSAGE);
+			writeLog(ally, (pokemonAttack.getAttackName() + " ha fallado! \n"));
 		}
 	}
 
@@ -283,13 +278,21 @@ public class FightManager {
 		if (isAlly) {
 			int defenseUp = (int) (allyPokemonTeam.get(0).getPokemonDefense() * 1.75);
 			allyPokemonTeam.get(0).setPokemonDefense(defenseUp);
-			JOptionPane.showMessageDialog(null, "Tu defensa ha aumentado!!!", "Bien!!!",
-					JOptionPane.INFORMATION_MESSAGE);
 		} else {
 			int defenseUp = (int) (enemyPokemonTeam.get(0).getPokemonDefense() * 1.75);
 			enemyPokemonTeam.get(0).setPokemonDefense(defenseUp);
-			JOptionPane.showMessageDialog(null, "Tu defensa ha aumentado!!!", "Bien!!!",
-					JOptionPane.INFORMATION_MESSAGE);
+		}
+		writeLog(isAlly, "Tu defensa ha aumentado!!! \n");
+
+	}
+
+	private void writeLog(boolean isAlly, String log) {
+		if (isAlly) {
+			gamePanel.textArea.setText("");
+			gamePanel.textArea.append(log);
+		} else {
+			gamePanel.enemyTextArea.setText("");
+			gamePanel.enemyTextArea.append(log);
 		}
 
 	}

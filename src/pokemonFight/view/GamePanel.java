@@ -20,7 +20,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 
 import pokemonFight.controller.SongController;
 import pokemonFight.manager.FightManager;
@@ -29,6 +32,7 @@ import pokemonFight.manager.PokemonManager;
 import pokemonFight.manager.StatusSingleton;
 import pokemonFight.manager.pojo.Item;
 import pokemonFight.manager.pojo.Pokemon;
+import javax.swing.JTextArea;
 
 public class GamePanel extends JPanel {
 
@@ -37,7 +41,7 @@ public class GamePanel extends JPanel {
 	public List<Pokemon> allyPokemonTeam = null;
 	public List<Pokemon> enemyPokemonTeam = null;
 	public List<Pokemon> combat = null;
-	
+
 	public List<Item> allyHeldItems = null;
 	public List<Item> enemyHeldItems = null;
 
@@ -45,7 +49,7 @@ public class GamePanel extends JPanel {
 	public Pokemon enemyPokemon = null;
 
 	public FightManager fightManager = null;
-	
+
 	public JLabel allyLvlLbl = null;
 	public JLabel enemyLvlLbl = null;
 	public JLabel enemyPokemonName = null;
@@ -61,7 +65,11 @@ public class GamePanel extends JPanel {
 	public JLabel swapBtn = null;
 	public JLabel itemBtn = null;
 	public JLabel defendBtn = null;
+
+	public JTextArea textArea = null;
 	
+	public JTextArea enemyTextArea = null;
+
 	public JProgressBar allyPokemonLifeBar = null;
 	public JProgressBar enemyPokemonLifeBar = null;
 
@@ -82,6 +90,18 @@ public class GamePanel extends JPanel {
 
 		this.setFocusable(true);
 		this.requestFocusInWindow();
+
+		textArea = new JTextArea();
+		textArea.setOpaque(false);
+		textArea.setForeground(new Color(107, 142, 35));
+		textArea.setBounds(10, 126, 210, 50);
+		add(textArea);
+		
+		enemyTextArea = new JTextArea();
+		enemyTextArea.setOpaque(false);
+		enemyTextArea.setForeground(new Color(128, 0, 32));
+		enemyTextArea.setBounds(570, 40, 210, 50);
+		add(enemyTextArea);
 
 		enemyLvlLbl = new JLabel();
 		enemyLvlLbl.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -108,7 +128,7 @@ public class GamePanel extends JPanel {
 		allyPokemonLifeBar.setForeground(Color.green);
 		allyPokemonLifeBar.setBounds(622, 350, 144, 20);
 		add(allyPokemonLifeBar);
-		
+
 		enemyPokemonName = new JLabel();
 		enemyPokemonName.setHorizontalAlignment(SwingConstants.CENTER);
 		enemyPokemonName.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -118,7 +138,7 @@ public class GamePanel extends JPanel {
 		scaledEnemyIcon = new ImageIcon();
 
 		enemySprite = new JLabel("");
-		enemySprite.setBounds(432, 106, 164, 145);
+		enemySprite.setBounds(432, 122, 164, 145);
 		add(enemySprite);
 
 		scaledAllyIcon = new ImageIcon();
@@ -139,7 +159,7 @@ public class GamePanel extends JPanel {
 
 		JLabel fightBackgroundLbl = new JLabel("");
 		fightBackgroundLbl.setIcon(getBackgroundImage());
-		fightBackgroundLbl.setBounds(0, 0, 800, 443);
+		fightBackgroundLbl.setBounds(0, 11, 800, 443);
 		add(fightBackgroundLbl);
 
 		StatusSingleton.getInstance().setGamePanel(this);
@@ -276,7 +296,6 @@ public class GamePanel extends JPanel {
 			layoutFirstClrLbl.setBounds(0, 443, 800, 157);
 			add(layoutFirstClrLbl);
 
-			
 			try {
 				StatusSingleton.getInstance().getSongController();
 				SongController.playRandomSong();
@@ -397,12 +416,12 @@ public class GamePanel extends JPanel {
 		}
 		return team;
 	}
-	
+
 	public void stopBattle() {
 		fightManager = new FightManager();
-	    if (fightManager.battleWorker != null && !fightManager.battleWorker.isDone()) {
-	    	fightManager.battleWorker.cancel(true); 
-	    }
+		if (fightManager.battleWorker != null && !fightManager.battleWorker.isDone()) {
+			fightManager.battleWorker.cancel(true);
+		}
 	}
 
 	private boolean checkAttackButtons() {
