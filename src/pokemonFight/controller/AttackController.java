@@ -3,7 +3,6 @@ package pokemonFight.controller;
 import pokemonFight.manager.pojo.Attack;
 
 public class AttackController {
-	Attack hola = new Attack("Infierno", 70, 150);
 	Attack vineWhip = new Attack("Látigo cepa", 45, 100);
 	Attack tackle = new Attack("Placaje", 40, 100);
 	Attack flamethrower = new Attack("Lanzallamas", 90, 100);

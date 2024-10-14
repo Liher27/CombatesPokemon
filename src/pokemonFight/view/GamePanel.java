@@ -144,7 +144,7 @@ public class GamePanel extends JPanel {
 		scaledAllyIcon = new ImageIcon();
 
 		allySprite = new JLabel("");
-		allySprite.setBounds(136, 298, 164, 145);
+		allySprite.setBounds(136, 309, 164, 145);
 		add(allySprite);
 
 		JLabel allyPokemonLifeBarLbl = new JLabel();
