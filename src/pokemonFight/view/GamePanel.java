@@ -20,10 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 
 import pokemonFight.controller.SongController;
 import pokemonFight.manager.FightManager;
@@ -67,7 +64,7 @@ public class GamePanel extends JPanel {
 	public JLabel defendBtn = null;
 
 	public JTextArea textArea = null;
-	
+
 	public JTextArea enemyTextArea = null;
 
 	public JProgressBar allyPokemonLifeBar = null;
@@ -96,7 +93,7 @@ public class GamePanel extends JPanel {
 		textArea.setForeground(new Color(107, 142, 35));
 		textArea.setBounds(10, 126, 210, 50);
 		add(textArea);
-		
+
 		enemyTextArea = new JTextArea();
 		enemyTextArea.setOpaque(false);
 		enemyTextArea.setForeground(new Color(128, 0, 32));
@@ -369,7 +366,13 @@ public class GamePanel extends JPanel {
 			if (result == 0) {
 				int selectedIndex = comboBox.getSelectedIndex();
 				if (selectedIndex != -1) {
-					Pokemon selectedPokemon = selectablePokemon.get(selectedIndex);
+					Pokemon cloningPokemon = selectablePokemon.get(selectedIndex);
+					Pokemon selectedPokemon = new Pokemon(cloningPokemon.getPokemonLvl(), cloningPokemon.getPokemonHP(),
+							cloningPokemon.getPokemonSpeed(), cloningPokemon.getPokemonDefense(),
+							cloningPokemon.getPokemonAttackStat(), cloningPokemon.getPokemonName(),
+							cloningPokemon.getPokemonAttack1(), cloningPokemon.getPokemonAttack2(),
+							cloningPokemon.getPokemonAttack3(), cloningPokemon.getPokemonAttack4(),
+							cloningPokemon.getPokemonFront(), cloningPokemon.getPokemonBack());
 					selectedPokemons.add(selectedPokemon);
 				}
 			} else {

@@ -51,7 +51,7 @@ public class FightManager {
 						continueBattle = false;
 					}
 					try {
-						Thread.sleep(500);
+						Thread.sleep(5);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -168,7 +168,7 @@ public class FightManager {
 			if (enemyPokemonTeam.size() > 1) {
 				enemyPokemonTeam.remove(0);
 				gamePanel.changePokemon(enemyPokemonTeam);
-				refreshOverlayData(allyPokemonTeam, false);
+				refreshOverlayData(allyPokemonTeam, turn);
 				turn = !turn;
 			} else {
 				JOptionPane.showMessageDialog(null, "El equipo local ha ganado el combate!!!", "Enhorabuena!!!",
@@ -181,7 +181,7 @@ public class FightManager {
 			if (allyPokemonTeam.size() > 1) {
 				allyPokemonTeam.remove(0);
 				gamePanel.changePokemon(allyPokemonTeam);
-				refreshOverlayData(allyPokemonTeam, true);
+				refreshOverlayData(allyPokemonTeam, turn);
 				turn = !turn;
 			} else {
 				JOptionPane.showMessageDialog(null, "El equipo visitante ha ganado el combate!!!", "Enhorabuena!!!",
@@ -189,7 +189,6 @@ public class FightManager {
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -204,7 +203,7 @@ public class FightManager {
 			gamePanel.allyPokemonLifeBar.setMinimum(0);
 			gamePanel.allyPokemonLifeBar.repaint();
 			gamePanel.allyPokemonName.setText(team.get(0).getPokemonName());
-			gamePanel.allyLvlLbl.setText(team.get(0).getPokemonLvl() + "");
+			gamePanel.allyLvlLbl.setText(String.valueOf(team.get(0).getPokemonLvl()));
 			gamePanel.decissionTextLbl.setText("¿Qué debería hacer " + team.get(0).getPokemonName() + "?");
 			gamePanel.scaledAllyIcon = new ImageIcon(team.get(0).getPokemonBack().getScaledInstance(gamePanel.newWidth,
 					gamePanel.newHeight, Image.SCALE_SMOOTH));
@@ -215,7 +214,7 @@ public class FightManager {
 			gamePanel.enemyPokemonLifeBar.setMinimum(0);
 			gamePanel.enemyPokemonLifeBar.repaint();
 			gamePanel.enemyPokemonName.setText(team.get(0).getPokemonName());
-			gamePanel.enemyLvlLbl.setText(team.get(0).getPokemonLvl() + "");
+			gamePanel.enemyLvlLbl.setText(String.valueOf(team.get(0).getPokemonLvl()));
 			gamePanel.decissionTextLbl.setText("¿Qué debería hacer " + team.get(0).getPokemonName() + "?");
 			gamePanel.scaledEnemyIcon = new ImageIcon(team.get(0).getPokemonFront()
 					.getScaledInstance(gamePanel.newWidth, gamePanel.newHeight, Image.SCALE_SMOOTH));
